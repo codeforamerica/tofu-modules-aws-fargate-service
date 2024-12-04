@@ -1,5 +1,7 @@
 # AWS Fargate Service Module
 
+[![Main Checks][badge-checks]][code-checks] [![GitHub Release][badge-release]][latest-release]
+
 This module launches a service on AWS Fargate. It creates a cluster, task
 definition, service, and container repository. In addition, it creates the load
 balancer, ACM certificate, Route53 records, and security groups needed to expose
@@ -12,7 +14,7 @@ to match your desired configuration. For example:
 
 ```hcl
 module "fargate_service" {
-  source = "github.com/codeforamerica/tofu-modules/aws/fargate_service"
+  source = "github.com/codeforamerica/tofu-modules-aws-fargate_service?ref=1.0.0"
 
   project       = "my-project"
   project_short = "my-proj"
@@ -143,9 +145,14 @@ secrets_manager_secrets = {
 | repository_arn | ARN of the ECR repository, if created.                       | `string` |
 | repository_url | URL for the container image.                                 | `string` |
 
+[badge-checks]: https://github.com/codeforamerica/tofu-modules-aws-fargate-service/actions/workflows/main.yaml/badge.svg
+[badge-release]: https://img.shields.io/github/v/release/codeforamerica/tofu-modules-aws-fargate-service?logo=github&label=Latest%20Release
+[code-checks]: https://github.com/codeforamerica/tofu-modules-aws-fargate-service/actions/workflows/main.yaml
 [container_command]: #container_command
 [ecs-exec]: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-exec.html
 [environment_secrets]: #environment_secrets
+[latest-release]: https://github.com/codeforamerica/tofu-modules-aws-fargate-service/releases/latest
 [secrets]: https://github.com/codeforamerica/tofu-modules-aws-secrets
 [secrets-manager]: https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html
 [secrets_manager_secrets]: #secrets_manager_secrets
+[tofu-modules]: https://github.com/codeforamerica/tofu-modules
