@@ -75,7 +75,7 @@ resource "aws_iam_role" "task" {
 }
 
 resource "aws_iam_role_policy_attachments_exclusive" "task" {
-  role_name   = aws_iam_role.execution.name
+  role_name   = aws_iam_role.task.name
   policy_arns = [
     aws_iam_policy.secrets.arn,
     "arn:${data.aws_partition.current.partition}:iam::aws:policy/CloudWatchFullAccess",
