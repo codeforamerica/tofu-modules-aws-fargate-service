@@ -131,6 +131,12 @@ variable "public_subnets" {
   default     = []
 }
 
+variable "read_only_root_filesystem" {
+  type        = bool
+  description = "Whether to mount the root filesystem as read-only."
+  default     = true
+}
+
 variable "repository_arn" {
   type        = string
   description = "ARN of the ECR repository the image resides in. Only required if using a private repository, but not creating it here."

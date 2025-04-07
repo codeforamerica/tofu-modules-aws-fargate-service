@@ -112,6 +112,7 @@ module "ecs_service" {
       env_vars          = var.environment_variables
       otel_log_level    = var.otel_log_level
       otel_ssm_arn      = module.otel_config.ssm_parameter_arn
+      read_only         = var.read_only_root_filesystem
 
       # Split defined secrets on ":" and use the name to get the arn.
       env_secrets = {

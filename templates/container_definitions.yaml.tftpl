@@ -4,6 +4,7 @@
   memory: ${memory}
   memoryReservation: ${memory}
   essential: true
+  readonlyRootFilesystem: ${read_only}
   logConfiguration:
     logDriver: awslogs
     options:
@@ -34,6 +35,7 @@
   memory: 512
   cpu: 256
   essential: false
+  readonlyRootFilesystem: ${read_only}
   logConfiguration:
     logDriver: awslogs
     options:
