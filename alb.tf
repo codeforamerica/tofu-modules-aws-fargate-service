@@ -49,7 +49,7 @@ module "alb" {
       create_attachment = false
 
       health_check = {
-        path                = "/health"
+        path                = var.health_check_path
         healthy_threshold   = 5
         unhealthy_threshold = 2
       }

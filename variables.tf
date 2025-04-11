@@ -58,6 +58,12 @@ variable "force_delete" {
   default     = false
 }
 
+variable "health_check_path" {
+  type        = string
+  description = "Application path to use for health checks."
+  default     = "/health"
+}
+
 variable "image_tag" {
   type        = string
   description = "Tag for the image to be deployed."
