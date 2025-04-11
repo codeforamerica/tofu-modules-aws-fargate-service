@@ -58,6 +58,12 @@ variable "force_delete" {
   default     = false
 }
 
+variable "health_check_grace_period" {
+  type        = number
+  description = "Time, in seconds, after a container comes into service before checking health."
+  default     = 300
+}
+
 variable "health_check_path" {
   type        = string
   description = "Application path to use for health checks."
