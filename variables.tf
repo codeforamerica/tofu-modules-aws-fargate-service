@@ -60,7 +60,7 @@ variable "force_delete" {
 
 variable "health_check_grace_period" {
   type        = number
-  description = "Time, in seconds, after a container comes into service before checking health."
+  description = "Time, in seconds, after a container comes into service before health checks must pass."
   default     = 300
 }
 
