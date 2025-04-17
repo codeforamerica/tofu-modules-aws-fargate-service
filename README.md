@@ -14,7 +14,7 @@ to match your desired configuration. For example:
 
 ```hcl
 module "fargate_service" {
-  source = "github.com/codeforamerica/tofu-modules-aws-fargate-service?ref=1.0.0"
+  source = "github.com/codeforamerica/tofu-modules-aws-fargate-service?ref=1.1.0"
 
   project       = "my-project"
   project_short = "my-proj"
