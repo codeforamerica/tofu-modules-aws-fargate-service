@@ -84,19 +84,20 @@ module "ecs_service" {
   version    = "~> 4.2"
   depends_on = [module.alb, module.ecs]
 
-  name                   = local.prefix
-  cluster                = module.ecs.arn
-  container_port         = var.container_port
-  container_name         = local.prefix
-  cpu                    = 512
-  memory                 = 1024
-  desired_count          = 1
-  vpc_subnets            = var.private_subnets
-  target_group_arn       = var.create_endpoint ? module.alb["this"].target_groups["endpoint"].arn : null
-  security_groups        = [module.task_security_group.security_group_id]
-  iam_daemon_role        = aws_iam_role.execution.arn
-  iam_task_role          = aws_iam_role.task.arn
-  enable_execute_command = var.enable_execute_command
+  name                              = local.prefix
+  cluster                           = module.ecs.arn
+  container_port                    = var.container_port
+  container_name                    = local.prefix
+  cpu                               = 512
+  memory                            = 1024
+  desired_count                     = 1
+  vpc_subnets                       = var.private_subnets
+  target_group_arn                  = var.create_endpoint ? module.alb["this"].target_groups["endpoint"].arn : null
+  security_groups                   = [module.task_security_group.security_group_id]
+  iam_daemon_role                   = aws_iam_role.execution.arn
+  iam_task_role                     = aws_iam_role.task.arn
+  enable_execute_command            = var.enable_execute_command
+  health_check_grace_period_seconds = var.health_check_grace_period
 
   container_definitions = jsonencode(yamldecode(templatefile(
     "${path.module}/templates/container_definitions.yaml.tftpl", {
