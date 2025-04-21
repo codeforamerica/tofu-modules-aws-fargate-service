@@ -5,6 +5,9 @@ on:
     branches-ignore:
       - main
 
+permissions:
+  contents: read
+
 jobs:
   lint:
     name: Lint updated files
@@ -32,15 +35,15 @@ jobs:
     steps:
       - name: Checkout source code
         uses: actions/checkout@v4
-      - name: Run Trivy vulnarability scanner
-        uses: aquasecurity/trivy-action@master
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@0.30.0
         with:
           scan-type: config
           format: sarif
-          output: "trivy-results.sarif"
+          output: trivy-results.sarif
       - name: Parse SARIF file
         # Always run this step, even if a previous step failed.
         if: always()
         uses: Ayrx/sarif_to_github_annotations@v0.2.2
         with:
-          sarif_file: "trivy-results.sarif"
+          sarif_file: trivy-results.sarif

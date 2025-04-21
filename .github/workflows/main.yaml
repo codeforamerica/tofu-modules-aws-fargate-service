@@ -5,10 +5,17 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+  security-events: write
+
 jobs:
   lint:
     name: Lint updated modules
     runs-on: ubuntu-latest
+    env:
+      # Required to avoid rate limiting when downloading plugins.
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Checkout source code
         uses: actions/checkout@v4
@@ -24,7 +31,12 @@ jobs:
       - name: Init TFLint
         run: tflint --init
       - name: Run TFLint
-        run: tflint --format compact --recursive
+        run: tflint --format sarif --recursive --config "$GITHUB_WORKSPACE/.tflint.hcl" > tflint-results.sarif
+      - name: Upload SARIF result
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: tflint-results.sarif
 
   trivy:
     name: Run security scan
@@ -33,14 +45,14 @@ jobs:
       - name: Checkout source code
         uses: actions/checkout@v4
       - name: Run Trivy vulnarability scanner
-        uses: aquasecurity/trivy-action@master
+        uses: aquasecurity/trivy-action@0.30.0
         with:
           scan-type: config
           format: sarif
-          output: "trivy-results.sarif"
+          output: trivy-results.sarif
       - name: Upload SARIF result
         # Always run this step, even if a previous step failed.
         if: always()
         uses: github/codeql-action/upload-sarif@v3
         with:
-          sarif_file: "trivy-results.sarif"
+          sarif_file: trivy-results.sarif
