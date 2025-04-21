@@ -175,12 +175,13 @@ secrets_manager_secrets = {
 
 ## Outputs
 
-| Name           | Description                                                  | Type     |
-|----------------|--------------------------------------------------------------|----------|
-| cluster_name   | Name of the ECS Fargate cluster.                             | `string` |
-| docker_push    | Commands to push a Docker image to the container repository. | `string` |
-| repository_arn | ARN of the ECR repository, if created.                       | `string` |
-| repository_url | URL for the container image.                                 | `string` |
+| Name              | Description                                                             | Type     |
+|-------------------|-------------------------------------------------------------------------|----------|
+| cluster_name      | Name of the ECS Fargate cluster.                                        | `string` |
+| docker_push       | Commands to push a Docker image to the container repository.            | `string` |
+| repository_arn    | ARN of the ECR repository, if created.                                  | `string` |
+| repository_url    | URL for the container image repository.                                 | `string` |
+| version_parameter | Name of the SSM parameter, if one exists, to store the current version. | `string` |
 
 [badge-checks]: https://github.com/codeforamerica/tofu-modules-aws-fargate-service/actions/workflows/main.yaml/badge.svg
 [badge-release]: https://img.shields.io/github/v/release/codeforamerica/tofu-modules-aws-fargate-service?logo=github&label=Latest%20Release

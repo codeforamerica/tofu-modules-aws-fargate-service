@@ -22,3 +22,8 @@ output "repository_url" {
   description = "URL of the container image repository."
   value       = module.ecr["this"].repository_url
 }
+
+output "version_parameter" {
+  description = "Name of the SSM parameter, if one exists, to store the current version."
+  value       = local.version_parameter
+}
