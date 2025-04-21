@@ -48,6 +48,37 @@ To update the source for this module, pass `-upgrade` to `tofu init`:
 tofu init -upgrade
 ```
 
+### Deploying updated container images
+
+When you use OpenTofu to manage your services and tasks, it can become out of
+sync if you're deploying new task versions outside of it. To facilitate
+deployment of new container images (e.g., application versions, patches, etc.)
+this module offers three ways to define the current image version:
+
+1. (Recommended) Use `create_version_parameter` to create and manage an
+   (insecure) SSM parameter. The initial value will be set to `image_tag`
+   (default "latest"), but updates to the value _must_ occur outside OpenTofu.
+   The current value of this parameter will be read when running `tofu`.
+
+   Use your normal CI/CD deployment process to build and push your image. Then
+   set the new version tag into the parameter before running `tofu apply`. This
+   allows you to completely automate the deployment process if you wish.
+
+1. Use `version_parameter` to specify your own SSM parameter. The task must be
+   able to retrieve the value of the parameter. This method allows for the same
+   automated deployment process as the previous one, but requires you to create
+   and maintain the parameter outside this module.
+
+1. (Default) Use `image_tag` to specify the image tag to deploy. This is the
+   default behavior and will be used if neither of the other inputs has been
+   set. This requires the `image_tag` input variable to be updated anytime the
+   desired version changes.
+
+   When using `create_version_parameter`, `image_tag` will be used to set the
+   initial value, but future updates to this variable will be ignored. This
+   allows for easier initial deployment and migration to using the SSM
+   parameter.
+
 ## Inputs
 
 | Name                      | Description                                                                                                     | Type           | Default     | Required    |
@@ -66,6 +97,7 @@ tofu init -upgrade
 | container_port            | Port the container listens on.                                                                                  | `number`       | `80`        | no          |
 | create_endpoint           | Create an Application Load Balancer for the service. Required to serve traffic.                                 | `bool`         | `true`      | no          |
 | create_repository         | Create an ECR repository to host the container image.                                                           | `bool`         | `true`      | no          |
+| create_version_parameter  | Create an SSM parameter to store the active version for the image tag.                                          | `bool`         | `false`     | no          |
 | enable_execute_command    | Enable the [ECS ExecuteCommand][ecs-exec] feature.                                                              | `bool`         | `false`     | no          |
 | environment               | Environment for the project.                                                                                    | `string`       | `"dev"`     | no          |
 | [environment_secrets]     | Secrets to be injected as environment variables into the container.                                             | `map(string)`  | `{}`        | no          |
@@ -88,6 +120,7 @@ tofu init -upgrade
 | tags                      | Optional tags to be applied to all resources.                                                                   | `list`         | `[]`        | no          |
 | task_policies             | Additional policies for the task role.                                                                          | `list(string)` | `[]`        | no          |
 | untagged_image_retention  | Retention period (after push) for untagged images, in days.                                                     | `number`       | `14`        | no          |
+| version_parameter         | Optional SSM parameter to use for the image tag.                                                                | `string`       | `null`      | no          |
 
 ### container_command
 

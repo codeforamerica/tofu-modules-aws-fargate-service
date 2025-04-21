@@ -216,8 +216,8 @@ variable "untagged_image_retention" {
 
 variable "version_parameter" {
   type        = string
-  description = "SSM parameter to use for the image tag."
-  default     = ""
+  description = "Optional SSM parameter to use for the image tag."
+  default     = null
 }
 
 variable "vpc_id" {

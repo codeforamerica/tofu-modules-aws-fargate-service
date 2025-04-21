@@ -10,6 +10,13 @@ data "aws_route53_zone" "domain" {
   name = var.domain
 }
 
+data "aws_ssm_parameter" "version" {
+  depends_on = [aws_ssm_parameter.version]
+  for_each   = local.version_parameter != null ? toset([local.version_parameter]) : []
+
+  name = each.value
+}
+
 data "aws_vpc" "current" {
   id = var.vpc_id
 }

@@ -20,7 +20,7 @@ module "ecr" {
 }
 
 resource "aws_ssm_parameter" "version" {
-  for_each = var.create_version_parameter ? ["this"] : []
+  for_each = var.create_version_parameter ? toset(["this"]) : []
 
   name           = "/${var.project}/${var.environment}/${var.service}/version"
   description    = "Current version of ${var.project} - ${var.environment} ${var.service}"
@@ -119,7 +119,7 @@ module "ecs_service" {
       name              = local.prefix
       cpu               = 256
       memory            = 512
-      image             = "${local.image_url}:${var.image_tag}"
+      image             = "${local.image_url}:${local.image_tag}"
       container_command = var.container_command
       container_port    = var.container_port
       log_group         = aws_cloudwatch_log_group.service.name
