@@ -19,6 +19,21 @@ module "ecr" {
   tags = var.tags
 }
 
+resource "aws_ssm_parameter" "version" {
+  for_each = var.create_version_parameter ? ["this"] : []
+
+  name           = "/${var.project}/${var.environment}/${var.service}/version"
+  description    = "Current version of ${var.project} - ${var.environment} ${var.service}"
+  type           = "String"
+  insecure_value = var.image_tag
+
+  tags = var.tags
+
+  lifecycle {
+    ignore_changes = [insecure_value]
+  }
+}
+
 # If this is a public load balancer, we need to allow all traffic.
 #trivy:ignore:avd-aws-0107
 module "endpoint_security_group" {

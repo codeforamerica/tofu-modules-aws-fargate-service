@@ -22,6 +22,12 @@ variable "create_repository" {
   default     = true
 }
 
+variable "create_version_parameter" {
+  type        = bool
+  description = "Create an SSM parameter to store the active version for the image tag."
+  default     = false
+}
+
 variable "domain" {
   type        = string
   description = "Domain name for the service. Required if creating an endpoint."
@@ -206,6 +212,12 @@ variable "untagged_image_retention" {
   type        = number
   description = "Retention period (after push) for untagged images, in days."
   default     = 14
+}
+
+variable "version_parameter" {
+  type        = string
+  description = "SSM parameter to use for the image tag."
+  default     = ""
 }
 
 variable "vpc_id" {
