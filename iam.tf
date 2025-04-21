@@ -46,12 +46,12 @@ resource "aws_iam_role" "execution" {
 
 resource "aws_iam_role_policy_attachments_exclusive" "execution" {
   role_name = aws_iam_role.execution.name
-  policy_arns = [
+  policy_arns = concat([
     # aws_iam_policy.execution.arn
     aws_iam_policy.secrets.arn,
     "arn:${data.aws_partition.current.partition}:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy",
     "arn:${data.aws_partition.current.partition}:iam::aws:policy/CloudWatchAgentServerPolicy"
-  ]
+  ], var.execution_policies)
 }
 
 resource "aws_iam_role" "task" {
@@ -76,10 +76,10 @@ resource "aws_iam_role" "task" {
 
 resource "aws_iam_role_policy_attachments_exclusive" "task" {
   role_name = aws_iam_role.task.name
-  policy_arns = [
+  policy_arns = concat([
     aws_iam_policy.secrets.arn,
     "arn:${data.aws_partition.current.partition}:iam::aws:policy/CloudWatchFullAccess",
     "arn:${data.aws_partition.current.partition}:iam::aws:policy/AmazonSSMFullAccess",
     "arn:${data.aws_partition.current.partition}:iam::aws:policy/CloudWatchAgentServerPolicy",
-  ]
+  ], var.task_policies)
 }

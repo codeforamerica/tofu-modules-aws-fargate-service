@@ -52,6 +52,12 @@ variable "environment_variables" {
   default     = {}
 }
 
+variable "execution_policies" {
+  type        = list(string)
+  description = "Additional policies to add to the task execution role."
+  default     = []
+}
+
 variable "force_delete" {
   type        = bool
   description = "Force deletion of resources. If changing to true, be sure to apply before destroying."
@@ -188,6 +194,12 @@ variable "tags" {
   type        = map(string)
   description = "Tags to apply to all resources."
   default     = {}
+}
+
+variable "task_policies" {
+  type        = list(string)
+  description = "Additional policies to add to the task role."
+  default     = []
 }
 
 variable "untagged_image_retention" {

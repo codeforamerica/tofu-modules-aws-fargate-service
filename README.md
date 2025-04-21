@@ -70,6 +70,7 @@ tofu init -upgrade
 | environment               | Environment for the project.                                                                                    | `string`       | `"dev"`     | no          |
 | [environment_secrets]     | Secrets to be injected as environment variables into the container.                                             | `map(string)`  | `{}`        | no          |
 | environment_variables     | Environment variables to be set on the container.                                                               | `map(string)`  | `{}`        | no          |
+| execution_policies        | Additional policies for the task execution role.                                                                | `list(string)` | `[]`        | no          |
 | force_delete              | Force deletion of resources. If changing to true, be sure to apply before destroying.                           | `bool`         | `false`     | no          |
 | health_check_grace_period | Time, in seconds, after a container comes into service before health checks must pass.                          | `number`       | `300`       | no          |
 | health_check_path         | Application path to use for health checks.                                                                      | `string`       | `"/health"` | no          |
@@ -85,6 +86,7 @@ tofu init -upgrade
 | stats_prefix              | Prefix for statsd metrics. Defaults to `project`/`service`.                                                     | `string`       | `""`        | no          |
 | subdomain                 | Optional subdomain for the service, to be appended to the domain for DNS.                                       | `string`       | `""`        | no          |
 | tags                      | Optional tags to be applied to all resources.                                                                   | `list`         | `[]`        | no          |
+| task_policies             | Additional policies for the task role.                                                                          | `list(string)` | `[]`        | no          |
 | untagged_image_retention  | Retention period (after push) for untagged images, in days.                                                     | `number`       | `14`        | no          |
 
 ### container_command
