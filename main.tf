@@ -19,6 +19,21 @@ module "ecr" {
   tags = var.tags
 }
 
+resource "aws_ssm_parameter" "version" {
+  for_each = var.create_version_parameter ? toset(["this"]) : []
+
+  name           = "/${var.project}/${var.environment}/${var.service}/version"
+  description    = "Current version of ${var.project} - ${var.environment} ${var.service}"
+  type           = "String"
+  insecure_value = var.image_tag
+
+  tags = var.tags
+
+  lifecycle {
+    ignore_changes = [insecure_value]
+  }
+}
+
 # If this is a public load balancer, we need to allow all traffic.
 #trivy:ignore:avd-aws-0107
 module "endpoint_security_group" {
@@ -104,7 +119,7 @@ module "ecs_service" {
       name              = local.prefix
       cpu               = 256
       memory            = 512
-      image             = "${local.image_url}:${var.image_tag}"
+      image             = "${local.image_url}:${local.image_tag}"
       container_command = var.container_command
       container_port    = var.container_port
       log_group         = aws_cloudwatch_log_group.service.name

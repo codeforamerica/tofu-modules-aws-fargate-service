@@ -8,8 +8,17 @@ locals {
 
   authorized_secrets = [
     for key, value in var.environment_secrets :
-    startswith(value, "arn:")
-    ? join(":", slice(split(":", value), 0, length(split(":", value)) - 1))
-    : module.secrets_manager[split(":", value)[0]].secret_arn
+    (startswith(value, "arn:")
+      ? join(":", slice(split(":", value), 0, length(split(":", value)) - 1))
+    : module.secrets_manager[split(":", value)[0]].secret_arn)
   ]
+
+  # Determine the correct image tag based on either an SSM parameter or the
+  # supplied input value.
+  version_parameter = (var.create_version_parameter
+    ? aws_ssm_parameter.version["this"].name
+  : var.version_parameter)
+  image_tag = (length(data.aws_ssm_parameter.version) > 0
+    ? data.aws_ssm_parameter.version[local.version_parameter].insecure_value
+  : var.image_tag)
 }
