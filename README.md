@@ -188,23 +188,13 @@ secrets_manager_secrets = {
 | version_parameter          | Name of the SSM parameter, if one exists, to store the current version. | `string` |
 
 [badge-checks]: https://github.com/codeforamerica/tofu-modules-aws-fargate-service/actions/workflows/main.yaml/badge.svg
-
 [badge-release]: https://img.shields.io/github/v/release/codeforamerica/tofu-modules-aws-fargate-service?logo=github&label=Latest%20Release
-
 [code-checks]: https://github.com/codeforamerica/tofu-modules-aws-fargate-service/actions/workflows/main.yaml
-
 [container_command]: #container_command
-
 [ecs-exec]: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-exec.html
-
 [environment_secrets]: #environment_secrets
-
 [latest-release]: https://github.com/codeforamerica/tofu-modules-aws-fargate-service/releases/latest
-
 [secrets]: https://github.com/codeforamerica/tofu-modules-aws-secrets
-
 [secrets-manager]: https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html
-
 [secrets_manager_secrets]: #secrets_manager_secrets
-
 [tofu-modules]: https://github.com/codeforamerica/tofu-modules
