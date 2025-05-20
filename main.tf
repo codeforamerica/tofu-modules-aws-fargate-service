@@ -117,8 +117,8 @@ module "ecs_service" {
   container_definitions = jsonencode(yamldecode(templatefile(
     "${path.module}/templates/container_definitions.yaml.tftpl", {
       name              = local.prefix
-      cpu               = 256
-      memory            = 512
+      cpu               = var.cpu - 256
+      memory            = var.memory - 512
       image             = "${local.image_url}:${local.image_tag}"
       container_command = var.container_command
       container_port    = var.container_port
