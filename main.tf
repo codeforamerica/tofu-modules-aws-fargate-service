@@ -103,8 +103,8 @@ module "ecs_service" {
   cluster                           = module.ecs.arn
   container_port                    = var.container_port
   container_name                    = local.prefix
-  cpu                               = 512
-  memory                            = 1024
+  cpu                               = var.cpu
+  memory                            = var.memory
   desired_count                     = 1
   vpc_subnets                       = var.private_subnets
   target_group_arn                  = var.create_endpoint ? module.alb["this"].target_groups["endpoint"].arn : null

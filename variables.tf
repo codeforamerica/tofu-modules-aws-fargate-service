@@ -28,6 +28,12 @@ variable "create_version_parameter" {
   default     = false
 }
 
+variable "cpu" {
+  type        = number
+  description = "CPU unit for this task."
+  default     = 512
+}
+
 variable "domain" {
   type        = string
   description = "Domain name for the service. Required if creating an endpoint."
@@ -120,6 +126,12 @@ variable "key_recovery_period" {
 variable "logging_key_id" {
   type        = string
   description = "KMS key ID for encrypting logs."
+}
+
+variable "memory" {
+  type        = number
+  description = "Memory for this task."
+  default     = 1024
 }
 
 variable "otel_log_level" {
