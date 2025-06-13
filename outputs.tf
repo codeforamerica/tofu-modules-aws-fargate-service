@@ -13,6 +13,11 @@ docker push ${local.image_url}:latest
 EOT
 }
 
+output "endpoint_security_group_id" {
+  description = "Security group ID for the endpoint."
+  value       = module.endpoint_security_group.security_group_id
+}
+
 output "repository_arn" {
   description = "ARN of the ECR repository, if created."
   value       = local.repository_arn
@@ -21,6 +26,11 @@ output "repository_arn" {
 output "repository_url" {
   description = "URL of the container image repository."
   value       = local.image_url
+}
+
+output "security_group_id" {
+  description = "Security group ID for the service."
+  value       = module.task_security_group.security_group_id
 }
 
 output "version_parameter" {
