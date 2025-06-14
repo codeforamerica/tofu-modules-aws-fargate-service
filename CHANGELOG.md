@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 1.3.0 (2025-06-14)
+
+### Feat
+
+- Make task resources configurable. (#16)
+- Allow the desired number of containers to be configured. (#19)
+- Added security group outputs. (#17)
+
 ## 1.2.1 (2025-05-09)
 
 ### Fix
