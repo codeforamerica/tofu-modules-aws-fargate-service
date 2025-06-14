@@ -28,6 +28,13 @@ variable "create_version_parameter" {
   default     = false
 }
 
+
+variable "cpu" {
+  type        = number
+  description = "CPU unit for this task."
+  default     = 512
+}
+
 variable "desired_containers" {
   type        = number
   description = "Desired number of running containers for the service."
@@ -126,6 +133,12 @@ variable "key_recovery_period" {
 variable "logging_key_id" {
   type        = string
   description = "KMS key ID for encrypting logs."
+}
+
+variable "memory" {
+  type        = number
+  description = "Memory for this task."
+  default     = 1024
 }
 
 variable "otel_log_level" {

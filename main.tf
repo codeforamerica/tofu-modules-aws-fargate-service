@@ -103,8 +103,8 @@ module "ecs_service" {
   cluster                           = module.ecs.arn
   container_port                    = var.container_port
   container_name                    = local.prefix
-  cpu                               = 512
-  memory                            = 1024
+  cpu                               = var.cpu
+  memory                            = var.memory
   desired_count                     = var.desired_containers
   vpc_subnets                       = var.private_subnets
   target_group_arn                  = var.create_endpoint ? module.alb["this"].target_groups["endpoint"].arn : null
@@ -117,8 +117,8 @@ module "ecs_service" {
   container_definitions = jsonencode(yamldecode(templatefile(
     "${path.module}/templates/container_definitions.yaml.tftpl", {
       name              = local.prefix
-      cpu               = 256
-      memory            = 512
+      cpu               = var.cpu - 256
+      memory            = var.memory - 512
       image             = "${local.image_url}:${local.image_tag}"
       container_command = var.container_command
       container_port    = var.container_port

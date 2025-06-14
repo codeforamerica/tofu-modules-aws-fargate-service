@@ -98,6 +98,7 @@ this module offers three ways to define the current image version:
 | create_endpoint           | Create an Application Load Balancer for the service. Required to serve traffic.                                 | `bool`         | `true`      | no          |
 | create_repository         | Create an ECR repository to host the container image.                                                           | `bool`         | `true`      | no          |
 | create_version_parameter  | Create an SSM parameter to store the active version for the image tag.                                          | `bool`         | `false`     | no          |
+| cpu                       | CPU unit for this task.                                                                                         | `number`       | `512`       | no          |
 | desired_containers        | Desired number of running containers for the service.                                                           | `number`       | `1`         | no          |
 | enable_execute_command    | Enable the [ECS ExecuteCommand][ecs-exec] feature.                                                              | `bool`         | `false`     | no          |
 | environment               | Environment for the project.                                                                                    | `string`       | `"dev"`     | no          |
@@ -112,6 +113,7 @@ this module offers three ways to define the current image version:
 | ingress_cidrs             | List of additional CIDR blocks to allow traffic from.                                                           | `list`         | `[]`        | no          |
 | key_recovery_period       | Number of days to recover the service KMS key after deletion.                                                   | `number`       | `30`        | no          |
 | log_retention_period      | Retention period for flow logs, in days.                                                                        | `number`       | `30`        | no          |
+| memory                    | Memory for this task.                                                                                           | `number`       | `1024`      | no          |
 | otel_log_level            | Log level for the OpenTelemetry collector.                                                                      | `string`       | `"info"`    | no          |
 | public                    | Whether the service should be exposed to the public Internet.                                                   | `bool`         | `false`     | no          |
 | repository_arn            | ARN of the ECR repository hosting the image. Only required if using a private repository, but not created here. | `string`       | `""`        | no          |
