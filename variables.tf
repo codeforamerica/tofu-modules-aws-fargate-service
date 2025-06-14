@@ -28,10 +28,17 @@ variable "create_version_parameter" {
   default     = false
 }
 
+
 variable "cpu" {
   type        = number
   description = "CPU unit for this task."
   default     = 512
+}
+
+variable "desired_containers" {
+  type        = number
+  description = "Desired number of running containers for the service."
+  default     = 1
 }
 
 variable "domain" {

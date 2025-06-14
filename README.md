@@ -99,6 +99,7 @@ this module offers three ways to define the current image version:
 | create_repository         | Create an ECR repository to host the container image.                                                           | `bool`         | `true`      | no          |
 | create_version_parameter  | Create an SSM parameter to store the active version for the image tag.                                          | `bool`         | `false`     | no          |
 | cpu                       | CPU unit for this task.                                                                                         | `number`       | `512`       | no          |
+| desired_containers        | Desired number of running containers for the service.                                                           | `number`       | `1`         | no          |
 | enable_execute_command    | Enable the [ECS ExecuteCommand][ecs-exec] feature.                                                              | `bool`         | `false`     | no          |
 | environment               | Environment for the project.                                                                                    | `string`       | `"dev"`     | no          |
 | [environment_secrets]     | Secrets to be injected as environment variables into the container.                                             | `map(string)`  | `{}`        | no          |

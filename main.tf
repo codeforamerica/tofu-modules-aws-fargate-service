@@ -105,7 +105,7 @@ module "ecs_service" {
   container_name                    = local.prefix
   cpu                               = var.cpu
   memory                            = var.memory
-  desired_count                     = 1
+  desired_count                     = var.desired_containers
   vpc_subnets                       = var.private_subnets
   target_group_arn                  = var.create_endpoint ? module.alb["this"].target_groups["endpoint"].arn : null
   security_groups                   = [module.task_security_group.security_group_id]
