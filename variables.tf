@@ -28,6 +28,12 @@ variable "create_version_parameter" {
   default     = false
 }
 
+variable "desired_containers" {
+  type        = number
+  description = "Desired number of running containers for the service."
+  default     = 1
+}
+
 variable "domain" {
   type        = string
   description = "Domain name for the service. Required if creating an endpoint."
