@@ -150,8 +150,8 @@ variable "oidc_settings" {
     token_endpoint         = string
     user_info_endpoint     = string
   })
-
-  description = "OIDC settings for the service. Required if `internal` is true."
+  description = "OIDC connection settings for the service endpoint."
+  sensitive   = true
   default     = null
 }
 
