@@ -157,25 +157,32 @@ If you want to authenticate users to your service before they can access it,
 you can configure an OpenID Connect (OIDC) provider. Configure the connection on
 your OIDC provider (e.g., Okta, Auth0, etc.) and then provide the settings here.
 
+> [!CAUTION]
+> The `client_secret` is a sensitive value and should not be stored in
+> version control. It is recommended to store it in AWS Secrets Manager and
+> provide the ARN of the secret using `client_secret_arn`.
+>
+> The provided secret must contain the `client_id` and `client_secret` keys.
+
 ```hcl
 oidc_settings = {
-    client_id  = "abc"
-    client_secret = "123"
-    authorization_endpoint = "https://myorg.okta.com/oauth2/v1/authorize"
-    issuer = "https://myorg.okta.com"
-    token_endpoint = "https://myorg.okta.com/oauth2/v1/token"
-    user_info_endpoint = "https://myorg.okta.com/oauth2/v1/userinfo"
-  }
+  client_secret_arn = module.secrets.secrets["oidc"].secret_arn
+  authorization_endpoint = "https://myorg.okta.com/oauth2/v1/authorize"
+  issuer = "https://myorg.okta.com"
+  token_endpoint = "https://myorg.okta.com/oauth2/v1/token"
+  user_info_endpoint = "https://myorg.okta.com/oauth2/v1/userinfo"
+}
 ```
 
-| Name                   | Description                                | Type     | Default | Required |
-|------------------------|--------------------------------------------|----------|---------|----------|
-| authorization_endpoint | Authorization endpoint from your provider. | `string` | n/a     | yes      |
-| client_id              | Client ID from your provider.              | `string` | n/a     | yes      |
-| client_secret          | Client secret from your provider.          | `string` | n/a     | yes      |
-| issuer                 | Issuer endpoint from your provider.        | `string` | n/a`    | yes      |
-| token_endpoint         | Token endpoint from your provider.         | `string` | n/a`    | yes      |
-| user_info_endpoint     | User info endpoint from your provider.     | `string` | n/a`    | yes      |
+| Name                   | Description                                                      | Type     | Default | Required    |
+|------------------------|------------------------------------------------------------------|----------|---------|-------------|
+| authorization_endpoint | Authorization endpoint from your provider.                       | `string` | n/a     | yes         |
+| issuer                 | Issuer endpoint from your provider.                              | `string` | n/a     | yes         |
+| token_endpoint         | Token endpoint from your provider.                               | `string` | n/a     | yes         |
+| user_info_endpoint     | User info endpoint from your provider.                           | `string` | n/a     | yes         |
+| client_id              | Client ID from your provider.                                    | `string` | `""`    | conditional |
+| client_secret          | Client secret from your provider.                                | `string` | `""`    | conditional |
+| client_secret_arn      | Secrets manager ARN where the client id and secret can be found. | `string` | `""`    | conditional |
 
 ### secrets_manager_secrets
 
