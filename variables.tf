@@ -141,6 +141,21 @@ variable "memory" {
   default     = 1024
 }
 
+variable "oidc_settings" {
+  type = object({
+    client_id     = string
+    client_secret = string
+    issuer_url    = string
+    authorization_endpoint = string
+    issuer = string
+    token_endpoint = string
+    user_info_endpoint = string
+  })
+
+  description = "OIDC settings for the service. Required if `internal` is true."
+  default     = null
+}
+
 variable "otel_log_level" {
   type        = string
   description = "Log level for the OpenTelemetry collector."

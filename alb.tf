@@ -31,6 +31,15 @@ module "alb" {
       protocol        = "HTTPS"
       ssl_policy      = "ELBSecurityPolicy-TLS-1-2-2017-01"
       certificate_arn = aws_acm_certificate.endpoint["this"].arn
+      authenticate_oidc = var.oidc_settings == null ? null : {
+        issuer            = var.oidc_settings.issuer
+        authorization_endpoint = var.oidc_settings.authorization_endpoint
+        token_endpoint    = var.oidc_settings.token_endpoint
+        user_info_endpoint = var.oidc_settings.user_info_endpoint
+        client_id         = var.oidc_settings.client_id
+        client_secret     = var.oidc_settings.client_secret
+        on_unauthenticated_request = "deny"
+      }
       forward = {
         target_group_key = "endpoint"
       }
