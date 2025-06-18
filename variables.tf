@@ -145,7 +145,6 @@ variable "oidc_settings" {
   type = object({
     client_id              = string
     client_secret          = string
-    issuer_url             = string
     authorization_endpoint = string
     issuer                 = string
     token_endpoint         = string

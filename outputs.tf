@@ -18,6 +18,11 @@ output "endpoint_security_group_id" {
   value       = module.endpoint_security_group.security_group_id
 }
 
+output "endpoint_url" {
+  description = "URL of the service endpoint."
+  value       = var.create_endpoint ? aws_route53_record.endpoint["this"].fqdn : ""
+}
+
 output "repository_arn" {
   description = "ARN of the ECR repository, if created."
   value       = local.repository_arn

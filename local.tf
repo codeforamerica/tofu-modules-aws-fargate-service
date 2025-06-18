@@ -5,7 +5,7 @@ locals {
   prefix_short   = "${var.project_short}-${var.environment}-${var.service_short}"
   repository_arn = var.create_repository ? module.ecr["this"].repository_arn : var.repository_arn
   stats_prefix   = var.stats_prefix != "" ? var.stats_prefix : "${var.project}/${var.service}"
-  oidc_settings  = var.oidc_settings == null ? {} : var.oidc_settings
+  oidc_settings  = var.oidc_settings == null ? {} : { authenticate_oidc : var.oidc_settings }
 
   authorized_secrets = [
     for key, value in var.environment_secrets :
