@@ -15,13 +15,13 @@ module "alb" {
   access_logs = var.logging_bucket == null ? {} : {
     bucket  = var.logging_bucket
     enabled = true
-    prefix  = join("/", compact([var.logging_bucket_prefix, var.service]))
+    prefix  = var.logging_bucket_prefix
   }
 
   connection_logs = var.logging_bucket == null ? {} : {
     bucket  = var.logging_bucket
     enabled = true
-    prefix  = join("/", compact([var.logging_bucket_prefix, var.service]))
+    prefix  = var.logging_bucket_prefix
   }
 
   # TODO: Support IPv6 and/or dualstack.
