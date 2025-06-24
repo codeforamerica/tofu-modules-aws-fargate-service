@@ -1,6 +1,6 @@
 module "alb" {
   source  = "terraform-aws-modules/alb/aws"
-  version = "~> 9.9"
+  version = "~> 9.17"
 
   for_each = var.create_endpoint ? toset(["this"]) : toset([])
 
