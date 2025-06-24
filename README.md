@@ -114,6 +114,7 @@ this module offers three ways to define the current image version:
 | key_recovery_period       | Number of days to recover the service KMS key after deletion.                                                   | `number`       | `30`        | no          |
 | log_retention_period      | Retention period for flow logs, in days.                                                                        | `number`       | `30`        | no          |
 | memory                    | Memory for this task.                                                                                           | `number`       | `1024`      | no          |
+| [oidc_settings]           | OIDC connection settings for the service endpoint.                                                              | `object`       | `null`      | no          |
 | otel_log_level            | Log level for the OpenTelemetry collector.                                                                      | `string`       | `"info"`    | no          |
 | public                    | Whether the service should be exposed to the public Internet.                                                   | `bool`         | `false`     | no          |
 | repository_arn            | ARN of the ECR repository hosting the image. Only required if using a private repository, but not created here. | `string`       | `""`        | no          |
@@ -139,7 +140,7 @@ container_command = ["bundle", "exec", "rackup"]
 
 An optional map of secrets to be injected as environment variables into the
 container. The key is the name of the environment variable, and the value is the
-identifier and key of a secret, seperated by ":". The identifier may be the name
+identifier and key of a secret, separated by `:`. The identifier may be the name
 of a secret defined using [secrets_manager_secrets], or the full ARN of an
 existing secret. For example:
 
@@ -149,6 +150,39 @@ environment_secrets = {
   EXAMPLE_CLIENT_KEY = "arn:aws:secretsmanager:us-east-1:123456789012:secret:project/staging/client:key"
 }
 ```
+
+### oidc_settings
+
+If you want to authenticate users to your service before they can access it,
+you can configure an OpenID Connect (OIDC) provider. Configure the connection on
+your OIDC provider (e.g., Okta, Auth0, etc.) and then provide the settings here.
+
+> [!CAUTION]
+> The `client_secret` is a sensitive value and should not be stored in
+> version control. It is recommended to store it in AWS Secrets Manager and
+> provide the ARN of the secret using `client_secret_arn`.
+>
+> The provided secret must contain the `client_id` and `client_secret` keys.
+
+```hcl
+oidc_settings = {
+  client_secret_arn = module.secrets.secrets["oidc"].secret_arn
+  authorization_endpoint = "https://myorg.okta.com/oauth2/v1/authorize"
+  issuer = "https://myorg.okta.com"
+  token_endpoint = "https://myorg.okta.com/oauth2/v1/token"
+  user_info_endpoint = "https://myorg.okta.com/oauth2/v1/userinfo"
+}
+```
+
+| Name                   | Description                                                      | Type     | Default | Required    |
+|------------------------|------------------------------------------------------------------|----------|---------|-------------|
+| authorization_endpoint | Authorization endpoint from your provider.                       | `string` | n/a     | yes         |
+| issuer                 | Issuer endpoint from your provider.                              | `string` | n/a     | yes         |
+| token_endpoint         | Token endpoint from your provider.                               | `string` | n/a     | yes         |
+| user_info_endpoint     | User info endpoint from your provider.                           | `string` | n/a     | yes         |
+| client_id              | Client ID from your provider.                                    | `string` | `""`    | conditional |
+| client_secret          | Client secret from your provider.                                | `string` | `""`    | conditional |
+| client_secret_arn      | Secrets manager ARN where the client id and secret can be found. | `string` | `""`    | conditional |
 
 ### secrets_manager_secrets
 
@@ -183,6 +217,7 @@ secrets_manager_secrets = {
 | cluster_name               | Name of the ECS Fargate cluster.                                        | `string` |
 | docker_push                | Commands to push a Docker image to the container repository.            | `string` |
 | endpoint_security_group_id | Security group ID for the endpoint.                                     | `string` |
+| endpoint_url               | URL of the service endpoint.                                            | `string` |
 | repository_arn             | ARN of the ECR repository, if created.                                  | `string` |
 | repository_url             | URL for the container image repository.                                 | `string` |
 | security_group_id          | Security group ID for the service.                                      | `string` |
@@ -195,6 +230,7 @@ secrets_manager_secrets = {
 [ecs-exec]: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-exec.html
 [environment_secrets]: #environment_secrets
 [latest-release]: https://github.com/codeforamerica/tofu-modules-aws-fargate-service/releases/latest
+[oidc_settings]: #oidc_settings
 [secrets]: https://github.com/codeforamerica/tofu-modules-aws-secrets
 [secrets-manager]: https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html
 [secrets_manager_secrets]: #secrets_manager_secrets

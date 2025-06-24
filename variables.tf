@@ -141,6 +141,30 @@ variable "memory" {
   default     = 1024
 }
 
+variable "oidc_settings" {
+  type = object({
+    client_id              = optional(string, null)
+    client_secret          = optional(string, null)
+    client_secret_arn      = optional(string, null)
+    authorization_endpoint = string
+    issuer                 = string
+    token_endpoint         = string
+    user_info_endpoint     = string
+  })
+  description = "OIDC connection settings for the service endpoint."
+  sensitive   = true
+  default     = null
+
+  validation {
+    condition = (
+      var.oidc_settings == null ||
+      (try(var.oidc_settings.client_id, null) != null && try(var.oidc_settings.client_secret, null) != null) ||
+      try(var.oidc_settings.client_secret_arn, null) != null
+    )
+    error_message = "Client ID and secret, or a secret ARN must be set."
+  }
+}
+
 variable "otel_log_level" {
   type        = string
   description = "Log level for the OpenTelemetry collector."
