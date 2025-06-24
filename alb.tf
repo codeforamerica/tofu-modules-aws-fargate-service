@@ -12,6 +12,18 @@ module "alb" {
   vpc_id                     = var.vpc_id
   internal                   = !var.public
 
+  access_logs = var.logging_bucket == null ? {} : {
+    bucket  = var.logging_bucket
+    enabled = true
+    prefix  = join("/", compact([var.logging_bucket_prefix, var.service]))
+  }
+
+  connection_logs = var.logging_bucket == null ? {} : {
+    bucket  = var.logging_bucket
+    enabled = true
+    prefix  = join("/", compact([var.logging_bucket_prefix, var.service]))
+  }
+
   # TODO: Support IPv6 and/or dualstack.
   ip_address_type = "ipv4"
 

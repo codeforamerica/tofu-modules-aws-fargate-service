@@ -112,6 +112,8 @@ this module offers three ways to define the current image version:
 | image_tags_mutable        | Whether the container repository allows tags to be mutated.                                                     | `bool`         | `false`     | no          |
 | ingress_cidrs             | List of additional CIDR blocks to allow traffic from.                                                           | `list`         | `[]`        | no          |
 | key_recovery_period       | Number of days to recover the service KMS key after deletion.                                                   | `number`       | `30`        | no          |
+| logging_bucket            | S3 bucket to use for logging. If not provided, load balancer logs will not be created.                          | `string`       | `null`      | no          |
+| logging_bucket_prefix     | Prefix for the S3 bucket to use for logging.                                                                    | `string`       | `null`      | no          |
 | log_retention_period      | Retention period for flow logs, in days.                                                                        | `number`       | `30`        | no          |
 | memory                    | Memory for this task.                                                                                           | `number`       | `1024`      | no          |
 | [oidc_settings]           | OIDC connection settings for the service endpoint.                                                              | `object`       | `null`      | no          |
