@@ -54,6 +54,15 @@ module "endpoint_security_group" {
   egress_cidr_blocks      = [data.aws_vpc.current.cidr_block]
   egress_rules            = ["all-all"]
   egress_ipv6_cidr_blocks = []
+  egress_with_cidr_blocks = var.oidc_settings == null ? [] : [
+    {
+      from_port   = 443
+      to_port     = 443
+      protocol    = "tcp"
+      description = "IdP access for OIDC authentication."
+      cidr_blocks = "0.0.0.0/0"
+    }
+  ]
 
   tags = var.tags
 }
