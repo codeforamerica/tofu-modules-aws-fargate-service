@@ -130,6 +130,18 @@ variable "key_recovery_period" {
   }
 }
 
+variable "logging_bucket" {
+  type        = string
+  description = "S3 bucket to use for logging. If not provided, load balancer logs will not be created."
+  default     = null
+}
+
+variable "logging_bucket_prefix" {
+  type        = string
+  description = "Prefix to store logs under in the logging bucket."
+  default     = null
+}
+
 variable "logging_key_id" {
   type        = string
   description = "KMS key ID for encrypting logs."

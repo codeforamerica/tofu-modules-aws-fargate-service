@@ -1,6 +1,6 @@
 module "alb" {
   source  = "terraform-aws-modules/alb/aws"
-  version = "~> 9.9"
+  version = "~> 9.17"
 
   for_each = var.create_endpoint ? toset(["this"]) : toset([])
 
@@ -11,6 +11,18 @@ module "alb" {
   subnets                    = var.public ? var.public_subnets : var.private_subnets
   vpc_id                     = var.vpc_id
   internal                   = !var.public
+
+  access_logs = var.logging_bucket == null ? {} : {
+    bucket  = var.logging_bucket
+    enabled = true
+    prefix  = var.logging_bucket_prefix
+  }
+
+  connection_logs = var.logging_bucket == null ? {} : {
+    bucket  = var.logging_bucket
+    enabled = true
+    prefix  = var.logging_bucket_prefix
+  }
 
   # TODO: Support IPv6 and/or dualstack.
   ip_address_type = "ipv4"
