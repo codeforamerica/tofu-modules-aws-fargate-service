@@ -13,10 +13,6 @@ and this project adheres to
 - Added log exports for the load balancer. (#23)
 - Support OIDC connections on the endpoint. (#20)
 
-### Fix
-
-- Added egress rule necessary for OIDC connections. (#22)
-
 ## 1.3.0 (2025-06-14)
 
 ### Feat
