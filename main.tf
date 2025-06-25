@@ -105,7 +105,7 @@ module "ecs" {
 
 module "ecs_service" {
   source     = "HENNGE/ecs/aws//modules/simple/fargate"
-  version    = "~> 4.2"
+  version    = "~> 5.1"
   depends_on = [module.alb, module.ecs]
 
   name                              = local.prefix

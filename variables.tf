@@ -275,6 +275,16 @@ variable "version_parameter" {
   default     = null
 }
 
+variable "volumes" {
+  type = map(object({
+    mount = string
+    type  = string
+    name  = optional(string, null)
+  }))
+  description = "Volumes to mount in the container."
+  default     = {}
+}
+
 variable "vpc_id" {
   type        = string
   description = "Id of the VPC to deploy into."
