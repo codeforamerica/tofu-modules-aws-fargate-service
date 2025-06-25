@@ -12,6 +12,12 @@
       awslogs-stream-prefix: "ecs"
   linuxParameters:
     initProcessEnabled: true
+  mountPoints:
+    %{~ for name, volume in volumes ~}
+    - sourceVolume: "${name}"
+      containerPath: "${volume.mount}"
+      readOnly: false
+    %{~ endfor ~}
   %{~ if length(container_command) > 0 ~}
   command: ["${join("\", \"", container_command)}"]
   %{~ endif ~}
