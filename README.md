@@ -127,6 +127,7 @@ this module offers three ways to define the current image version:
 | task_policies             | Additional policies for the task role.                                                                          | `list(string)` | `[]`        | no          |
 | untagged_image_retention  | Retention period (after push) for untagged images, in days.                                                     | `number`       | `14`        | no          |
 | version_parameter         | Optional SSM parameter to use for the image tag.                                                                | `string`       | `null`      | no          |
+| [volumes]                 | Volumes to mount in the container.                                                                              | `map(object)`  | `{}`        | no          |
 
 ### container_command
 
@@ -212,6 +213,27 @@ secrets_manager_secrets = {
 | create_random_password | Creates a random password as the staring value.              | `bool`   | `false` | no       |
 | start_value            | Value to be set into the secret at creation.                 | `string` | `"{}"`  | no       |
 
+### Volumes
+
+You can use the `volumes` input to mount volumes in the container. Currently,
+only persistent volumes are supported. For each volume, an EFS file system
+will be created and mounted in the container.
+
+```hcl
+volumes = {
+  data = {
+    type = "persistent"
+    mount = "/data"
+  }
+}
+```
+
+| Name  | Description                                                         | Type     | Default        | Required |
+|-------|---------------------------------------------------------------------|----------|----------------|----------|
+| mount | Path in the container where the volume will be mounted.             | `string` | n/a            | yes      |
+| name  | Name of the volume. Defauls to the key from the map.                | `string` | `null`         | no       |
+| type  | Type of volume to create. Currently only `persistent` is supported. | `string` | `"persistent"` | no       |
+
 ## Outputs
 
 | Name                       | Description                                                             | Type     |
@@ -237,3 +259,4 @@ secrets_manager_secrets = {
 [secrets-manager]: https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html
 [secrets_manager_secrets]: #secrets_manager_secrets
 [tofu-modules]: https://github.com/codeforamerica/tofu-modules
+[volumes]: #volumes
