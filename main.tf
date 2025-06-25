@@ -122,7 +122,7 @@ module "ecs_service" {
   iam_task_role                     = aws_iam_role.task.arn
   enable_execute_command            = var.enable_execute_command
   health_check_grace_period_seconds = var.health_check_grace_period
-  force_delete = var.force_delete
+  force_delete                      = var.force_delete
 
   container_definitions = jsonencode(yamldecode(templatefile(
     "${path.module}/templates/container_definitions.yaml.tftpl", {
@@ -144,20 +144,20 @@ module "ecs_service" {
       env_secrets = {
         for key, value in var.environment_secrets :
         key => split(":", value)[0] == "arn"
-          ? "${join(":", slice(split(":", value), 0, length(split(":", value)) - 1))}:${split(":", value)[length(split(":", value)) - 1]}::"
-          : "${module.secrets_manager[split(":", value)[0]].secret_arn}:${split(":", value)[1]}::"
+        ? "${join(":", slice(split(":", value), 0, length(split(":", value)) - 1))}:${split(":", value)[length(split(":", value)) - 1]}::"
+        : "${module.secrets_manager[split(":", value)[0]].secret_arn}:${split(":", value)[1]}::"
       }
     }
   )))
 
-  task_volume_configurations = [for k,v in var.volumes : {
+  task_volume_configurations = [for k, v in var.volumes : {
     name = k
     efs_volume_configuration = {
       file_system_id        = module.efs[k].id
       root_directory        = "/"
       transition_encryption = "ENABLED"
     }
-  }
+    }
   ]
 
   tags = var.tags
