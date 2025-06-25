@@ -278,7 +278,7 @@ variable "version_parameter" {
 variable "volumes" {
   type = map(object({
     mount = string
-    type  = string
+    type  = optional(string, "persistent")
     name  = optional(string, null)
   }))
   description = "Volumes to mount in the container."
