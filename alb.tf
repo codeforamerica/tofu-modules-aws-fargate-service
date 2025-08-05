@@ -46,7 +46,7 @@ module "alb" {
       forward = {
         target_group_key = "endpoint"
       }
-    }, local.oidc_settings)
+    }, nonsensitive(local.oidc_settings))
   }
 
   target_groups = {

@@ -11,7 +11,7 @@ data "aws_route53_zone" "domain" {
 }
 
 data "aws_secretsmanager_secret_version" "oidc" {
-  for_each = try(var.oidc_settings.client_secret_arn, null) != null ? toset(["this"]) : toset([])
+  for_each = nonsensitive(try(var.oidc_settings.client_secret_arn, null)) != null ? toset(["this"]) : toset([])
 
   secret_id = var.oidc_settings.client_secret_arn
 }
