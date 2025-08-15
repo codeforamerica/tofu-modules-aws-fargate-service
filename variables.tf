@@ -263,6 +263,16 @@ variable "task_policies" {
   default     = []
 }
 
+variable "use_target_group_port_suffix" {
+  type        = bool
+  description = <<-EOT
+    Whether to use the listener port as a suffix for the ALB listener rule.
+    Useful if you way need to replace the target group at some point.
+    CAUTION: This will default to true in a future release.
+  EOT
+  default     = false
+}
+
 variable "untagged_image_retention" {
   type        = number
   description = "Retention period (after push) for untagged images, in days."
