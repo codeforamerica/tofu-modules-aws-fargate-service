@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 1.6.0 (2025-08-15)
+
+### Feat
+
+- Optionally prefix the target group name with the port.  (#28)
+
 ## 1.5.1 (2025-08-05)
 
 ### Fix
