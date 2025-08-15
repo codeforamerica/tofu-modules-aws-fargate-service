@@ -5,6 +5,7 @@ locals {
   prefix_short   = "${var.project_short}-${var.environment}-${var.service_short}"
   repository_arn = var.create_repository ? module.ecr["this"].repository_arn : var.repository_arn
   stats_prefix   = var.stats_prefix != "" ? var.stats_prefix : "${var.project}/${var.service}"
+  target_group_name = "${local.prefix_short}-app${var.use_target_group_port_suffix ? "-${var.container_port}" : ""}"
 
   oidc_settings = var.oidc_settings == null ? {} : {
     authenticate_oidc : merge(var.oidc_settings, length(data.aws_secretsmanager_secret_version.oidc) == 0 ? {} : {

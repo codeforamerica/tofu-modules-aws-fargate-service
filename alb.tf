@@ -51,7 +51,7 @@ module "alb" {
 
   target_groups = {
     endpoint = {
-      name        = "${local.prefix_short}-app"
+      name        = local.target_group_name
       protocol    = "HTTP"
       target_type = "ip"
       port        = var.container_port
