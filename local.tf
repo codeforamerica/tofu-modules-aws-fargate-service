@@ -1,10 +1,10 @@
 locals {
-  fqdn           = var.subdomain != "" ? "${var.subdomain}.${var.domain}" : var.domain
-  image_url      = var.create_repository ? module.ecr["this"].repository_url : var.image_url
-  prefix         = "${var.project}-${var.environment}-${var.service}"
-  prefix_short   = "${var.project_short}-${var.environment}-${var.service_short}"
-  repository_arn = var.create_repository ? module.ecr["this"].repository_arn : var.repository_arn
-  stats_prefix   = var.stats_prefix != "" ? var.stats_prefix : "${var.project}/${var.service}"
+  fqdn              = var.subdomain != "" ? "${var.subdomain}.${var.domain}" : var.domain
+  image_url         = var.create_repository ? module.ecr["this"].repository_url : var.image_url
+  prefix            = "${var.project}-${var.environment}-${var.service}"
+  prefix_short      = "${var.project_short}-${var.environment}-${var.service_short}"
+  repository_arn    = var.create_repository ? module.ecr["this"].repository_arn : var.repository_arn
+  stats_prefix      = var.stats_prefix != "" ? var.stats_prefix : "${var.project}/${var.service}"
   target_group_name = "${local.prefix_short}-${var.use_target_group_port_suffix ? var.container_port : "app"}"
 
   oidc_settings = var.oidc_settings == null ? {} : {
@@ -17,7 +17,7 @@ locals {
   authorized_secrets = [
     for key, value in var.environment_secrets :
     (startswith(value, "arn:")
-      ? join(":", slice(split(":", value), 0, length(split(":", value)) - 1))
+      ? (length(split(":", value)) > 7 ? join(":", slice(split(":", value), 0, 7)) : value)
     : module.secrets_manager[split(":", value)[0]].secret_arn)
   ]
 
