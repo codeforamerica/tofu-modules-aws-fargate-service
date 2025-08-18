@@ -6,6 +6,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 1.6.1 (2025-08-18)
+
+### Fix
+
+- String secrets don't work because we assume there's a JSON key in the ARN. (#30)
+
 ## 1.6.0 (2025-08-15)
 
 ### Feat
