@@ -14,7 +14,7 @@ to match your desired configuration. For example:
 
 ```hcl
 module "fargate_service" {
-  source = "github.com/codeforamerica/tofu-modules-aws-fargate-service?ref=1.4.0"
+  source = "github.com/codeforamerica/tofu-modules-aws-fargate-service?ref=1.6.1"
 
   project       = "my-project"
   project_short = "my-proj"
@@ -132,7 +132,7 @@ this module offers three ways to define the current image version:
 | tags                         | Optional tags to be applied to all resources.                                                                                             | `list`         | `[]`        | no          |
 | task_policies                | Additional policies for the task role.                                                                                                    | `list(string)` | `[]`        | no          |
 | untagged_image_retention     | Retention period (after push) for untagged images, in days.                                                                               | `number`       | `14`        | no          |
-| use_target_group_port_suffix | Whether to use the listener port as a suffix for the ALB listener rule. Useful if you way need to replace the target group at some point. | `number`       | `14`        | no          |
+| use_target_group_port_suffix | Whether to use the listener port as a suffix for the ALB listener rule. Useful if you way need to replace the target group at some point. | `bool`         | `false`     | no          |
 | version_parameter            | Optional SSM parameter to use for the image tag.                                                                                          | `string`       | `null`      | no          |
 | [volumes]                    | Volumes to mount in the container.                                                                                                        | `map(object)`  | `{}`        | no          |
 
