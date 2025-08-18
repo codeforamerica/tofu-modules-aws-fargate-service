@@ -17,7 +17,7 @@ locals {
   authorized_secrets = [
     for key, value in var.environment_secrets :
     (startswith(value, "arn:")
-      ? (length(split(":", value)) > 7 ? join(":", slice(split(":", value), 0, 6)) : value)
+      ? (length(split(":", value)) > 7 ? join(":", slice(split(":", value), 0, 7)) : value)
     : module.secrets_manager[split(":", value)[0]].secret_arn)
   ]
 
