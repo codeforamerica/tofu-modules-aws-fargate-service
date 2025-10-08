@@ -23,6 +23,11 @@ output "endpoint_url" {
   value       = var.create_endpoint ? aws_route53_record.endpoint["this"].fqdn : ""
 }
 
+output "load_balancer_arn" {
+  description = "ARN of the load balancer, if created."
+  value       = var.create_endpoint ? module.alb["this"].arn : ""
+}
+
 output "repository_arn" {
   description = "ARN of the ECR repository, if created."
   value       = local.repository_arn

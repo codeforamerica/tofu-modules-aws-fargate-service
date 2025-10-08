@@ -249,6 +249,7 @@ volumes = {
 | docker_push                | Commands to push a Docker image to the container repository.            | `string` |
 | endpoint_security_group_id | Security group ID for the endpoint.                                     | `string` |
 | endpoint_url               | URL of the service endpoint.                                            | `string` |
+| load_balancer_arn          | ARN of the load balancer, if created.                                   | `string` |
 | repository_arn             | ARN of the ECR repository, if created.                                  | `string` |
 | repository_url             | URL for the container image repository.                                 | `string` |
 | security_group_id          | Security group ID for the service.                                      | `string` |
