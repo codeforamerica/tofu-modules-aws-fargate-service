@@ -16,13 +16,13 @@ module "secrets_manager" {
   tags = var.tags
 }
 
-module "otel_config" {
-  source  = "terraform-aws-modules/ssm-parameter/aws"
-  version = "~> 1.1"
-
-  name        = "/${var.project}/${var.environment}/${var.service}/otel"
+resource "aws_ssm_parameter" "otel_config" {
+  name        = "/${join("/", compact([var.project, var.environment, var.service, "otel"]))}"
   description = "Configuration for the OpenTelemetry collector."
   tier        = "Intelligent-Tiering"
+  type        = "String"
+  overwrite   = true
+
   value = templatefile("${path.module}/templates/aws-otel-config.yaml.tftpl", {
     app_namespace = local.stats_prefix
   })
