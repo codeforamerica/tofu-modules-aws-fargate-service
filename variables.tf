@@ -119,6 +119,12 @@ variable "ingress_cidrs" {
   default     = []
 }
 
+variable "ingress_prefix_list_ids" {
+  type        = list(string)
+  description = "List of prefix list IDs to allow ingress from."
+  default     = []
+}
+
 variable "key_recovery_period" {
   type        = number
   default     = 30
