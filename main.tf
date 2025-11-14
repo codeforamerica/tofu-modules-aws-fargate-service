@@ -34,14 +34,31 @@ resource "aws_ssm_parameter" "version" {
   }
 }
 
+# Prefix lists can be pretty big and count towards the security group rule
+# limit. To avoid hitting that limit, we create a dedicated security group
+# that only has rules for the prefix lists on port 443.
+module "prefix_security_group" {
+  for_each = length(var.ingress_prefix_list_ids) > 0 ? toset(["this"]) : toset([])
+
+  source  = "terraform-aws-modules/security-group/aws"
+  version = "~> 5.1"
+
+  name                    = "${local.prefix}-endpoint-prefix"
+  description             = "Prefix list access for the ${var.project} load balancer."
+  vpc_id                  = var.vpc_id
+  ingress_prefix_list_ids = var.ingress_prefix_list_ids
+  ingress_rules           = ["https-443-tcp"]
+}
+
 # If this is a public load balancer, we need to allow all traffic.
 #trivy:ignore:avd-aws-0107
 module "endpoint_security_group" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "~> 5.1"
 
-  name   = "${local.prefix}-endpoint"
-  vpc_id = var.vpc_id
+  name        = "${local.prefix}-endpoint"
+  description = "Access for the ${var.project} load balancer."
+  vpc_id      = var.vpc_id
 
   # Ingress for HTTP
   ingress_cidr_blocks = concat(

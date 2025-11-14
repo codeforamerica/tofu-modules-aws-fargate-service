@@ -7,6 +7,11 @@ locals {
   stats_prefix      = var.stats_prefix != "" ? var.stats_prefix : "${var.project}/${var.service}"
   target_group_name = "${local.prefix_short}-${var.use_target_group_port_suffix ? var.container_port : "app"}"
 
+  alb_security_groups = compact([
+    module.endpoint_security_group.security_group_id,
+    length(var.ingress_prefix_list_ids) > 0 ? module.prefix_security_group["this"].security_group_id : null
+  ])
+
   oidc_settings = var.oidc_settings == null ? {} : {
     authenticate_oidc : merge(var.oidc_settings, length(data.aws_secretsmanager_secret_version.oidc) == 0 ? {} : {
       client_id     = jsondecode(data.aws_secretsmanager_secret_version.oidc["this"].secret_string)["client_id"]

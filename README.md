@@ -14,7 +14,7 @@ to match your desired configuration. For example:
 
 ```hcl
 module "fargate_service" {
-  source = "github.com/codeforamerica/tofu-modules-aws-fargate-service?ref=1.6.2"
+  source = "github.com/codeforamerica/tofu-modules-aws-fargate-service?ref=1.7.0"
 
   project       = "my-project"
   project_short = "my-proj"
@@ -117,6 +117,7 @@ this module offers three ways to define the current image version:
 | image_tag                    | Tag of the container image to be deployed.                                                                                                | `string`       | `"latest"`  | no          |
 | image_tags_mutable           | Whether the container repository allows tags to be mutated.                                                                               | `bool`         | `false`     | no          |
 | ingress_cidrs                | List of additional CIDR blocks to allow traffic from.                                                                                     | `list`         | `[]`        | no          |
+| ingress_prefix_list_ids      | List of prefix list IDs to allow ingress from.                                                                                            | `list`         | `[]`        | no          |
 | key_recovery_period          | Number of days to recover the service KMS key after deletion.                                                                             | `number`       | `30`        | no          |
 | logging_bucket               | S3 bucket to use for logging. If not provided, load balancer logs will not be created.                                                    | `string`       | `null`      | no          |
 | logging_bucket_prefix        | Prefix for the S3 bucket to use for logging.                                                                                              | `string`       | `null`      | no          |
