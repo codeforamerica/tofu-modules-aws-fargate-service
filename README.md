@@ -189,7 +189,20 @@ group.
 1. Set `manage_performance_log_group` to `true` in your configuration
 1. Identify the location of this module in your configuration (e.g.:
    `module.fargate_service`)
-2.
+1. Run the following command, or use an [`import`][import] block, to import the
+   existing log group, replacing the module path and log group name needed:
+
+   ```bash
+   tofu import \
+     'module.fargate_service.aws_cloudwatch_log_group.this["performance"]' \
+     /aws/containerinsights/my-project-dev-worker/performance
+   ```
+
+1. Apply your updated configuration:
+
+   ```bash
+   tofu apply
+   ```
 
 ### oidc_settings
 
@@ -292,6 +305,7 @@ volumes = {
 [container_command]: #container_command
 [ecs-exec]: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-exec.html
 [environment_secrets]: #environment_secrets
+[import]: https://opentofu.org/docs/cli/import/
 [latest-release]: https://github.com/codeforamerica/tofu-modules-aws-fargate-service/releases/latest
 [manage_performance_log_group]: #manage_performance_log_group
 [oidc_settings]: #oidc_settings
