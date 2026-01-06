@@ -15,7 +15,11 @@ locals {
   # Define log groups to be managed.
   log_groups = {
     service     = join("/", compact(["/aws/ecs", var.project, var.environment, var.service]))
-    performance = "/aws/ecs/containerinsights/${local.prefix}/performance"
+    performance = var.manage_performance_log_group ? "/aws/ecs/containerinsights/${local.prefix}/performance" : null
+  }
+  managed_log_groups = {
+    for key, value in local.log_groups :
+    key => value if value != null
   }
 
   oidc_settings = var.oidc_settings == null ? {} : {

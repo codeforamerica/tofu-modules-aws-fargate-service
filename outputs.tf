@@ -28,9 +28,9 @@ output "load_balancer_arn" {
   value       = var.create_endpoint ? module.alb["this"].arn : ""
 }
 
-output "log_groups" {
-  description = "CloudWatch log groups created for the service."
-  value       = aws_cloudwatch_log_group.this
+output "log_group_names" {
+  description = "Names of managed CloudWatch log groups for the service."
+  value       = [for key, group in aws_cloudwatch_log_group.this : group.name]
 }
 
 output "repository_arn" {

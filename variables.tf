@@ -158,6 +158,12 @@ variable "log_retention_period" {
   default     = 30
 }
 
+variable "manage_performance_log_group" {
+  type        = bool
+  description = "Whether to manage the container insights performance log group for the service. Will default to `true` in a future release."
+  default     = false
+}
+
 variable "memory" {
   type        = number
   description = "Memory for this task."
