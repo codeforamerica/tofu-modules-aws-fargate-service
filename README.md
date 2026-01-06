@@ -244,17 +244,18 @@ volumes = {
 
 ## Outputs
 
-| Name                       | Description                                                             | Type     |
-|----------------------------|-------------------------------------------------------------------------|----------|
-| cluster_name               | Name of the ECS Fargate cluster.                                        | `string` |
-| docker_push                | Commands to push a Docker image to the container repository.            | `string` |
-| endpoint_security_group_id | Security group ID for the endpoint.                                     | `string` |
-| endpoint_url               | URL of the service endpoint.                                            | `string` |
-| load_balancer_arn          | ARN of the load balancer, if created.                                   | `string` |
-| repository_arn             | ARN of the ECR repository, if created.                                  | `string` |
-| repository_url             | URL for the container image repository.                                 | `string` |
-| security_group_id          | Security group ID for the service.                                      | `string` |
-| version_parameter          | Name of the SSM parameter, if one exists, to store the current version. | `string` |
+| Name                       | Description                                                             | Type           |
+|----------------------------|-------------------------------------------------------------------------|----------------|
+| cluster_name               | Name of the ECS Fargate cluster.                                        | `string`       |
+| docker_push                | Commands to push a Docker image to the container repository.            | `string`       |
+| endpoint_security_group_id | Security group ID for the endpoint.                                     | `string`       |
+| endpoint_url               | URL of the service endpoint.                                            | `string`       |
+| load_balancer_arn          | ARN of the load balancer, if created.                                   | `string`       |
+| log_groups                 | List of CloudWatch log group ARNs created for the service.              | `list(string)` |
+| repository_arn             | ARN of the ECR repository, if created.                                  | `string`       |
+| repository_url             | URL for the container image repository.                                 | `string`       |
+| security_group_id          | Security group ID for the service.                                      | `string`       |
+| version_parameter          | Name of the SSM parameter, if one exists, to store the current version. | `string`       |
 
 [badge-checks]: https://github.com/codeforamerica/tofu-modules-aws-fargate-service/actions/workflows/main.yaml/badge.svg
 [badge-release]: https://img.shields.io/github/v/release/codeforamerica/tofu-modules-aws-fargate-service?logo=github&label=Latest%20Release
