@@ -12,6 +12,11 @@ and this project adheres to
 
 - Optionally manage the performance log group. (#38)
 - Use an SSM parameter directly instead of a module for OTEL config. (#36)
+- Added `log_groups` output.
+
+### Fix
+
+- Actually accept (and use) `log_retention_period`.
 
 ## 1.7.0 (2025-11-14)
 
