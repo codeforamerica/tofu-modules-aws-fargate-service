@@ -149,7 +149,7 @@ module "ecs_service" {
       image             = "${local.image_url}:${local.image_tag}"
       container_command = var.container_command
       container_port    = var.container_port
-      log_group         = aws_cloudwatch_log_group.service.name
+      log_group         = aws_cloudwatch_log_group.this["service"].name
       region            = data.aws_region.current.name
       namespace         = "${var.project}/${var.service}"
       env_vars          = var.environment_variables

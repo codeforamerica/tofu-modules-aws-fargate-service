@@ -28,6 +28,11 @@ output "load_balancer_arn" {
   value       = var.create_endpoint ? module.alb["this"].arn : ""
 }
 
+output "log_group_names" {
+  description = "Names of managed CloudWatch log groups for the service."
+  value       = [for key, group in aws_cloudwatch_log_group.this : group.name]
+}
+
 output "repository_arn" {
   description = "ARN of the ECR repository, if created."
   value       = local.repository_arn

@@ -28,7 +28,6 @@ variable "create_version_parameter" {
   default     = false
 }
 
-
 variable "cpu" {
   type        = number
   description = "CPU unit for this task."
@@ -151,6 +150,18 @@ variable "logging_bucket_prefix" {
 variable "logging_key_id" {
   type        = string
   description = "KMS key ID for encrypting logs."
+}
+
+variable "log_retention_period" {
+  type        = number
+  description = "Retention period for CloudWatch Logs, in days."
+  default     = 30
+}
+
+variable "manage_performance_log_group" {
+  type        = bool
+  description = "Whether to manage the container insights performance log group for the service. Will default to `true` in a future release."
+  default     = false
 }
 
 variable "memory" {
