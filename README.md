@@ -165,7 +165,7 @@ environment_secrets = {
 
 ### manage_performance_log_group
 
-> [!CAUTION]
+> [!WARNING]
 > The next major release (2.0.0) of this module will default this option to
 > `true` and mark it as deprecated. We recommend setting this to `true` for new
 > deployments, and following the steps below to update existing deployments.
