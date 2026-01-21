@@ -88,7 +88,7 @@ this module offers three ways to define the current image version:
 > now to avoid unexpected changes in the future.
 
 | Name                           | Description                                                                                                                               | Type           | Default     | Required    |
-|--------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------|----------------|-------------|-------------|
+| ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------- | -------------- | ----------- | ----------- |
 | logging_key_id                 | KMS key to use for log encryption.                                                                                                        | `string`       | n/a         | yes         |
 | private_subnets                | List of private subnet CIDR blocks.                                                                                                       | `list`         | n/a         | yes         |
 | project                        | Name of the project.                                                                                                                      | `string`       | n/a         | yes         |
@@ -228,7 +228,7 @@ oidc_settings = {
 ```
 
 | Name                   | Description                                                      | Type     | Default | Required    |
-|------------------------|------------------------------------------------------------------|----------|---------|-------------|
+| ---------------------- | ---------------------------------------------------------------- | -------- | ------- | ----------- |
 | authorization_endpoint | Authorization endpoint from your provider.                       | `string` | n/a     | yes         |
 | issuer                 | Issuer endpoint from your provider.                              | `string` | n/a     | yes         |
 | token_endpoint         | Token endpoint from your provider.                               | `string` | n/a     | yes         |
@@ -257,7 +257,7 @@ secrets_manager_secrets = {
 ```
 
 | Name                   | Description                                                  | Type     | Default | Required |
-|------------------------|--------------------------------------------------------------|----------|---------|----------|
+| ---------------------- | ------------------------------------------------------------ | -------- | ------- | -------- |
 | description            | Description of the secret.                                   | `string` | n/a     | yes      |
 | recovery_window        | Number of days that a secret can be recovered after deltion. | `string` | `30`    | no       |
 | create_random_password | Creates a random password as the staring value.              | `bool`   | `false` | no       |
@@ -279,7 +279,7 @@ volumes = {
 ```
 
 | Name  | Description                                                         | Type     | Default        | Required |
-|-------|---------------------------------------------------------------------|----------|----------------|----------|
+| ----- | ------------------------------------------------------------------- | -------- | -------------- | -------- |
 | mount | Path in the container where the volume will be mounted.             | `string` | n/a            | yes      |
 | name  | Name of the volume. Defauls to the key from the map.                | `string` | `null`         | no       |
 | type  | Type of volume to create. Currently only `persistent` is supported. | `string` | `"persistent"` | no       |
@@ -287,16 +287,18 @@ volumes = {
 ## Outputs
 
 | Name                       | Description                                                             | Type           |
-|----------------------------|-------------------------------------------------------------------------|----------------|
+| -------------------------- | ----------------------------------------------------------------------- | -------------- |
 | cluster_name               | Name of the ECS Fargate cluster.                                        | `string`       |
 | docker_push                | Commands to push a Docker image to the container repository.            | `string`       |
 | endpoint_security_group_id | Security group ID for the endpoint.                                     | `string`       |
 | endpoint_url               | URL of the service endpoint.                                            | `string`       |
+| execution_role_arn         | ARN of the role used to execute tasks.                                  | `string`       |
 | load_balancer_arn          | ARN of the load balancer, if created.                                   | `string`       |
 | log_group_names            | Names of managed CloudWatch log groups for the service.                 | `list(string)` |
 | repository_arn             | ARN of the ECR repository, if created.                                  | `string`       |
 | repository_url             | URL for the container image repository.                                 | `string`       |
 | security_group_id          | Security group ID for the service.                                      | `string`       |
+| task_role_arn              | ARN of the role attached to the running tasks.                          | `string`       |
 | version_parameter          | Name of the SSM parameter, if one exists, to store the current version. | `string`       |
 
 [badge-checks]: https://github.com/codeforamerica/tofu-modules-aws-fargate-service/actions/workflows/main.yaml/badge.svg
