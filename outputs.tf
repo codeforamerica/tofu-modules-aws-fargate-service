@@ -23,6 +23,11 @@ output "endpoint_url" {
   value       = var.create_endpoint ? aws_route53_record.endpoint["this"].fqdn : ""
 }
 
+output "execution_role_arn" {
+  description = "ARN of the role used to execute tasks."
+  value       = aws_iam_role.execution.arn
+}
+
 output "load_balancer_arn" {
   description = "ARN of the load balancer, if created."
   value       = var.create_endpoint ? module.alb["this"].arn : ""
@@ -46,6 +51,11 @@ output "repository_url" {
 output "security_group_id" {
   description = "Security group ID for the service."
   value       = module.task_security_group.security_group_id
+}
+
+output "task_role_arn" {
+  description = "ARN of the role attached to the running tasks."
+  value       = aws_iam_role.task.arn
 }
 
 output "version_parameter" {
