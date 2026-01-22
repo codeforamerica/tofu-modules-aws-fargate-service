@@ -7,12 +7,10 @@ Statement:
     AWS: arn:${partition}:iam::${account_id}:root
   Action: kms:*
   Resource: "*"
-%{ if ecr_arn != null ~}
 - Sid: Allow ECR to encrypt container images
   Effect: Allow
   Principal:
-    AWS:
-    - "${ecr_arn}"
+    AWS: "*"
   Action:
   - kms:Decrypt
   - kms:Encrypt
@@ -22,15 +20,14 @@ Statement:
   Condition:
     StringEquals:
       kms:CallerAccount: "${account_id}"
-      kms:EncryptionContext:aws:ecr:arn: "${ecr_arn}
-%{ endif ~}
+      kms:EncryptionContext:aws:ecr:arn: "arn:${partition}:ecr:${region}:${account_id}:repository/${repository_name}"
 - Sid: Allow ECS containers to encrypt objects
   Effect: Allow
   Resource: "*"
   Principal:
     AWS:
     %{ for arn in ecs_roles ~}
-    - "${arn}
+    - "${arn}"
     %{ endfor }
   Action:
   - kms:GenerateDataKey*
