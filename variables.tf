@@ -208,17 +208,28 @@ variable "private_subnets" {
 variable "project" {
   type        = string
   description = "Project that these resources are supporting."
+
+  validation {
+    condition     = length(var.project) + length(var.environment) + length(var.service) <= 57
+    error_message = <<-EOT
+      Project, environment, and service names must be less than 57 characters, combined.
+      Project: ${var.project} (${length(var.project)} characters)
+      Environment: ${var.environment} (${length(var.environment)} characters)
+      Service: ${var.service} (${length(var.service)} characters)
+      Total: ${length(var.project) + length(var.environment) + length(var.service)} characters
+    EOT
+  }
+}
+
+variable "project_short" {
+  type        = string
+  description = "Short name for the project. Used in resource names with character limits."
 }
 
 variable "public" {
   type        = bool
   description = "Whether the service should be exposed to the public Internet."
   default     = false
-}
-
-variable "project_short" {
-  type        = string
-  description = "Short name for the project. Used in resource names with character limits."
 }
 
 variable "public_subnets" {

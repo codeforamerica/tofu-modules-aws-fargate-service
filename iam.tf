@@ -25,7 +25,7 @@ resource "aws_iam_policy" "secrets" {
 }
 
 resource "aws_iam_role" "execution" {
-  name        = "${local.prefix}-execution"
+  name        = "${local.prefix}-exec"
   description = "${var.service} task execution role for ${var.project} ${var.environment}."
 
   assume_role_policy = jsonencode({
