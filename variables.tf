@@ -210,8 +210,14 @@ variable "project" {
   description = "Project that these resources are supporting."
 
   validation {
-    condition     = length(var.project) + length(var.environment) <= 58
-    error_message = "Project and environment names must be less than 58 characters, combined."
+    condition     = length(var.project) + length(var.environment) + length(var.service) <= 57
+    error_message = <<-EOT
+      Project, environment, and service names must be less than 57 characters, combined.
+      Project: ${var.project} (${length(var.project)} characters)
+      Environment: ${var.environment} (${length(var.environment)} characters)
+      Service: ${var.service} (${length(var.service)} characters)
+      Total: ${length(var.project) + length(var.environment) + length(var.service)} characters
+    EOT
   }
 }
 
