@@ -140,6 +140,7 @@ module "ecs_service" {
   enable_execute_command            = var.enable_execute_command
   health_check_grace_period_seconds = var.health_check_grace_period
   force_delete                      = var.force_delete
+  force_new_deployment              = var.force_new_deployment
 
   container_definitions = jsonencode(yamldecode(templatefile(
     "${path.module}/templates/container_definitions.yaml.tftpl", {
