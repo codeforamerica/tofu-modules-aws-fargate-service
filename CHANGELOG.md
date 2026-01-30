@@ -6,6 +6,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 1.9.0 (2026-01-30)
+
+### Feat
+
+- Add force_new_deployment ECS param (#43)
+- Shorten execution role name and add character length validation. (#42)
+- Added outputs for execution and task role ARNs. (#39)
+
+### Fix
+
+- Update KMS key policy to prevent public access. (#41)
+
 ## 1.8.0 (2026-01-06)
 
 ### Feat
