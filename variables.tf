@@ -82,6 +82,12 @@ variable "force_delete" {
   default     = false
 }
 
+variable "force_new_deployment" {
+  type        = bool
+  description = "Force a new task deployment of the service."
+  default     = false
+}
+
 variable "health_check_grace_period" {
   type        = number
   description = "Time, in seconds, after a container comes into service before health checks must pass."
