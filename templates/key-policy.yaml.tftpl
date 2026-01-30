@@ -1,4 +1,4 @@
-Version: '2012-10-17'
+Version: "2012-10-17"
 Id: Fargate hosting key policy
 Statement:
 - Sid: Enable IAM User Permissions
@@ -20,11 +20,14 @@ Statement:
   Condition:
     StringEquals:
       kms:CallerAccount: "${account_id}"
-      kms:EncryptionContext:aws:ecr:arn: arn:${partition}:ecr:${region}:${account_id}:repository/${repository_name}
-- Sid: Allow Fargate containers to encrypt objects
+      kms:EncryptionContext:aws:ecr:arn: "arn:${partition}:ecr:${region}:${account_id}:repository/${repository_name}"
+- Sid: Allow ECS containers to encrypt objects
   Effect: Allow
   Resource: "*"
   Principal:
-    AWS: "*"
+    AWS:
+    %{ for arn in ecs_roles ~}
+    - "${arn}"
+    %{ endfor }
   Action:
   - kms:GenerateDataKey*
