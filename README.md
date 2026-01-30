@@ -1,6 +1,6 @@
 # AWS Fargate Service Module
 
-[![Main Checks][badge-checks]][code-checks] [![GitHub Release][badge-release]][latest-release]
+[![GitHub Release][badge-release]][latest-release]
 
 This module launches a service on AWS Fargate. It creates a cluster, task
 definition, service, and container repository. In addition, it creates the load
@@ -302,9 +302,7 @@ volumes = {
 | task_role_arn              | ARN of the role attached to the running tasks.                          | `string`       |
 | version_parameter          | Name of the SSM parameter, if one exists, to store the current version. | `string`       |
 
-[badge-checks]: https://github.com/codeforamerica/tofu-modules-aws-fargate-service/actions/workflows/main.yaml/badge.svg
 [badge-release]: https://img.shields.io/github/v/release/codeforamerica/tofu-modules-aws-fargate-service?logo=github&label=Latest%20Release
-[code-checks]: https://github.com/codeforamerica/tofu-modules-aws-fargate-service/actions/workflows/main.yaml
 [container_command]: #container_command
 [ecs-exec]: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-exec.html
 [environment_secrets]: #environment_secrets
