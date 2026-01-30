@@ -13,7 +13,6 @@ and this project adheres to
 - Add force_new_deployment ECS param (#43)
 - Shorten execution role name and add character length validation. (#42)
 - Added outputs for execution and task role ARNs. (#39)
-- Added outputs for exedcution and task role ARNs.
 
 ### Fix
 
