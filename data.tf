@@ -5,7 +5,7 @@ data "aws_partition" "current" {}
 data "aws_region" "current" {}
 
 data "aws_route53_zone" "domain" {
-  for_each = var.create_endpoint ? toset(["this"]) : toset([])
+  for_each = var.create_endpoint && var.hosted_zone_id == null ? toset(["this"]) : toset([])
 
   name = var.domain
 }

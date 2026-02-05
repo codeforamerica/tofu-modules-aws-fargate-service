@@ -1,5 +1,9 @@
 locals {
   fqdn              = var.subdomain != "" ? "${var.subdomain}.${var.domain}" : var.domain
+  hosted_zone_id    = (!var.create_endpoint
+    ? null
+    : (var.hosted_zone_id == null ? data.aws_route53_zone.domain["this"].zone_id : var.hosted_zone_id)
+  )
   image_url         = var.create_repository ? module.ecr["this"].repository_url : var.image_url
   prefix            = join("-", compact([var.project, var.environment, var.service]))
   prefix_short      = join("-", compact([var.project_short, var.environment, var.service_short]))
