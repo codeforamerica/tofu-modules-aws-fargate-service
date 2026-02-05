@@ -89,7 +89,7 @@ resource "aws_route53_record" "endpoint" {
 
   name    = local.fqdn
   type    = "A"
-  zone_id = data.aws_route53_zone.domain["this"].zone_id
+  zone_id = local.hosted_zone_id
 
   alias {
     name                   = module.alb["this"].dns_name
@@ -112,7 +112,7 @@ resource "aws_route53_record" "endpoint_validation" {
   records         = [each.value.record]
   ttl             = 60
   type            = each.value.type
-  zone_id         = data.aws_route53_zone.domain["this"].zone_id
+  zone_id         = local.hosted_zone_id
 }
 
 resource "aws_acm_certificate_validation" "endpoint" {

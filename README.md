@@ -88,7 +88,7 @@ this module offers three ways to define the current image version:
 > now to avoid unexpected changes in the future.
 
 | Name                           | Description                                                                                                                               | Type           | Default     | Required    |
-| ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------- | -------------- | ----------- | ----------- |
+|--------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------|----------------|-------------|-------------|
 | logging_key_id                 | KMS key to use for log encryption.                                                                                                        | `string`       | n/a         | yes         |
 | private_subnets                | List of private subnet CIDR blocks.                                                                                                       | `list`         | n/a         | yes         |
 | project                        | Name of the project.                                                                                                                      | `string`       | n/a         | yes         |
@@ -115,6 +115,7 @@ this module offers three ways to define the current image version:
 | force_new_deployment           | Force a new task deployment of the service.                                                                                               | `bool`         | `false`     | no          |
 | health_check_grace_period      | Time, in seconds, after a container comes into service before health checks must pass.                                                    | `number`       | `300`       | no          |
 | health_check_path              | Application path to use for health checks.                                                                                                | `string`       | `"/health"` | no          |
+| hosted_zone_id                 | ID of the hosted zone for the domain, leave empty to have this module look it up.                                                         | `string`       | `null`      | no          |
 | image_tag                      | Tag of the container image to be deployed.                                                                                                | `string`       | `"latest"`  | no          |
 | image_tags_mutable             | Whether the container repository allows tags to be mutated.                                                                               | `bool`         | `false`     | no          |
 | ingress_cidrs                  | List of additional CIDR blocks to allow traffic from.                                                                                     | `list`         | `[]`        | no          |

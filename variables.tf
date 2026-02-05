@@ -100,6 +100,12 @@ variable "health_check_path" {
   default     = "/health"
 }
 
+variable "hosted_zone_id" {
+  type        = string
+  description = "ID of the hosted zone for the domain, leave empty to have this module look it up."
+  default     = null
+}
+
 variable "image_tag" {
   type        = string
   description = "Tag for the image to be deployed."
