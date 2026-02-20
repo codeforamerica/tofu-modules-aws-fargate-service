@@ -41,7 +41,7 @@ module "alb" {
     https = merge({
       port            = 443
       protocol        = "HTTPS"
-      ssl_policy      = "ELBSecurityPolicy-TLS-1-2-2017-01"
+      ssl_policy      = "ELBSecurityPolicy-TLS13-1-2-Res-PQ-2025-09"
       certificate_arn = aws_acm_certificate.endpoint["this"].arn
       forward = {
         target_group_key = "endpoint"
