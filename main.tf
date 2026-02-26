@@ -89,6 +89,7 @@ module "endpoint_security_group" {
 module "task_security_group" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "~> 5.1"
+  depends_on = [module.endpoint_security_group.security_group_id]
 
   name   = "${local.prefix}-endpoint"
   vpc_id = var.vpc_id
