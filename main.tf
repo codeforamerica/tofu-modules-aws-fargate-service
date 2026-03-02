@@ -112,7 +112,7 @@ module "task_security_group" {
 
 module "ecs" {
   source  = "HENNGE/ecs/aws"
-  version = "~> 4.2"
+  version = "~> 5.5"
 
   name                      = local.prefix
   capacity_providers        = ["FARGATE"]
@@ -123,7 +123,7 @@ module "ecs" {
 
 module "ecs_service" {
   source     = "HENNGE/ecs/aws//modules/simple/fargate"
-  version    = "~> 5.1"
+  version    = "~> 5.5"
   depends_on = [module.alb, module.ecs]
 
   name                              = local.prefix
@@ -142,6 +142,7 @@ module "ecs_service" {
   health_check_grace_period_seconds = var.health_check_grace_period
   force_delete                      = var.force_delete
   force_new_deployment              = var.force_new_deployment
+  triggers                          = { redeploy = var.force_new_deployment ? plantimestamp() : "false" }
 
   container_definitions = jsonencode(yamldecode(templatefile(
     "${path.module}/templates/container_definitions.yaml.tftpl", {
