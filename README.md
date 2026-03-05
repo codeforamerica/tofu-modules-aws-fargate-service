@@ -79,6 +79,51 @@ this module offers three ways to define the current image version:
    allows for easier initial deployment and migration to using the SSM
    parameter.
 
+### Configuring OpenTelemetry
+
+The container definition produced by this module includes a sidecar of the
+[AWS Distro for OpenTelemetry (ADOT) Collector][adot]. This can be used to
+collect metrics, logs, and traces from your application. This greatly enhances
+the overall observability of your application.
+
+The latest version is installed by default. It's recommend that you pin this to
+a specific version using `otel_collector_version` and perform regular updates on
+your own schedule.
+
+> [!TIP]
+> To take full advantage of this functionally, make sure your application is
+> instrumented using [OpenTelemetry (OTEL)][otel].
+
+By default, the collector is configured to send all supported instrumentation to
+the appropriate AWS services:
+
+* Metrics are sent to CloudWatch
+* Logs are sent to CloudWatch Logs
+* Traces are sent to X-Ray
+
+With the default configuration, you can set `stats_prefix` to a custom value to
+prefix all metrics with. By default, this is set to
+`"${var.project}/${var.service}"`.
+
+You can override this by setting a custom configuration with `otel_config`. To
+help facilitate additional keys or other secrets that may be necessary, you can
+set `otel_secrets` to a map of secrets from AWS Secrets Manager or SSM Parameter
+Store.
+
+For example:
+
+```hcl
+otel_collector_version = "v0.47.0"
+otel_config            = file("${path.module}/files/aws-otel-config.yaml")
+otel_secrets           = {
+  DD_API_KEY = ""arn:aws:secretsmanager:us-east-1:123456789012:secret:project/staging/DD_API_KEY"
+}
+```
+
+Additionally, to help debug OTEL related issues, you can override the log level
+by setting `otel_log_level` to a valid [java.util.logging log
+level][otel-log-levels].
+
 ## Inputs
 
 > [!CAUTION]
@@ -87,58 +132,61 @@ this module offers three ways to define the current image version:
 > listener port as a suffix for the target group, you should set this to `false`
 > now to avoid unexpected changes in the future.
 
-| Name                           | Description                                                                                                                               | Type           | Default     | Required    |
-|--------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------|----------------|-------------|-------------|
-| logging_key_id                 | KMS key to use for log encryption.                                                                                                        | `string`       | n/a         | yes         |
-| private_subnets                | List of private subnet CIDR blocks.                                                                                                       | `list`         | n/a         | yes         |
-| project                        | Name of the project.                                                                                                                      | `string`       | n/a         | yes         |
-| project_short                  | Short name for the project. Used in resource names with character limits.                                                                 | `string`       | n/a         | yes         |
-| service                        | Service that these resources are supporting. Example: `"api"`, `"web"`, `"worker"`                                                        | `string`       | n/a         | yes         |
-| service_short                  | Short name for the service. Used in resource names with character limits.                                                                 | `string`       | n/a         | yes         |
-| vpc_id                         | Id of the VPC to deploy into.                                                                                                             | `string`       | n/a         | yes         |
-| public_subnets                 | List of public subnet CIDR blocks. Required when creating a public endpoint.                                                              | `list`         | n/a         | conditional |
-| domain                         | Domain name for service. Required if creating an endpoint. Example: `"staging.service.org"`                                               | `string`       | `""`        | conditional |
-| image_url                      | URL of the container image. Required if not creating a repository.                                                                        | `string`       | `""`        | conditional |
-| [container_command]            | Command to run in the container. Defaults to the image's CMD.                                                                             | `list(string)` | `[]`        | no          |
-| container_port                 | Port the container listens on.                                                                                                            | `number`       | `80`        | no          |
-| create_endpoint                | Create an Application Load Balancer for the service. Required to serve traffic.                                                           | `bool`         | `true`      | no          |
-| create_repository              | Create an ECR repository to host the container image.                                                                                     | `bool`         | `true`      | no          |
-| create_version_parameter       | Create an SSM parameter to store the active version for the image tag.                                                                    | `bool`         | `false`     | no          |
-| cpu                            | CPU unit for this task.                                                                                                                   | `number`       | `512`       | no          |
-| desired_containers             | Desired number of running containers for the service.                                                                                     | `number`       | `1`         | no          |
-| enable_execute_command         | Enable the [ECS ExecuteCommand][ecs-exec] feature.                                                                                        | `bool`         | `false`     | no          |
-| environment                    | Environment for the project.                                                                                                              | `string`       | `"dev"`     | no          |
-| [environment_secrets]          | Secrets to be injected as environment variables into the container.                                                                       | `map(string)`  | `{}`        | no          |
-| environment_variables          | Environment variables to be set on the container.                                                                                         | `map(string)`  | `{}`        | no          |
-| execution_policies             | Additional policies for the task execution role.                                                                                          | `list(string)` | `[]`        | no          |
-| force_delete                   | Force deletion of resources. If changing to true, be sure to apply before destroying.                                                     | `bool`         | `false`     | no          |
-| force_new_deployment           | Force a new task deployment of the service.                                                                                               | `bool`         | `false`     | no          |
-| health_check_grace_period      | Time, in seconds, after a container comes into service before health checks must pass.                                                    | `number`       | `300`       | no          |
-| health_check_path              | Application path to use for health checks.                                                                                                | `string`       | `"/health"` | no          |
-| hosted_zone_id                 | ID of the hosted zone for the domain, leave empty to have this module look it up.                                                         | `string`       | `null`      | no          |
-| image_tag                      | Tag of the container image to be deployed.                                                                                                | `string`       | `"latest"`  | no          |
-| image_tags_mutable             | Whether the container repository allows tags to be mutated.                                                                               | `bool`         | `false`     | no          |
-| ingress_cidrs                  | List of additional CIDR blocks to allow traffic from.                                                                                     | `list`         | `[]`        | no          |
-| ingress_prefix_list_ids        | List of prefix list IDs to allow ingress from.                                                                                            | `list`         | `[]`        | no          |
-| key_recovery_period            | Number of days to recover the service KMS key after deletion.                                                                             | `number`       | `30`        | no          |
-| logging_bucket                 | S3 bucket to use for logging. If not provided, load balancer logs will not be created.                                                    | `string`       | `null`      | no          |
-| logging_bucket_prefix          | Prefix for the S3 bucket to use for logging.                                                                                              | `string`       | `null`      | no          |
-| log_retention_period           | Retention period for CloudWatch Logs, in days.                                                                                            | `number`       | `30`        | no          |
-| [manage_performance_log_group] | Whether to manage the container insights performance log group for the service. Will default to `true` in a future release.               | `bool`         | `false`     | no          |
-| memory                         | Memory for this task.                                                                                                                     | `number`       | `1024`      | no          |
-| [oidc_settings]                | OIDC connection settings for the service endpoint.                                                                                        | `object`       | `null`      | no          |
-| otel_log_level                 | Log level for the OpenTelemetry collector.                                                                                                | `string`       | `"info"`    | no          |
-| public                         | Whether the service should be exposed to the public Internet.                                                                             | `bool`         | `false`     | no          |
-| repository_arn                 | ARN of the ECR repository hosting the image. Only required if using a private repository, but not created here.                           | `string`       | `""`        | no          |
-| [secrets_manager_secrets]      | Map of secrets to be created in Secrets Manager.                                                                                          | `map(object)`  | `{}`        | no          |
-| stats_prefix                   | Prefix for statsd metrics. Defaults to `project`/`service`.                                                                               | `string`       | `""`        | no          |
-| subdomain                      | Optional subdomain for the service, to be appended to the domain for DNS.                                                                 | `string`       | `""`        | no          |
-| tags                           | Optional tags to be applied to all resources.                                                                                             | `list`         | `[]`        | no          |
-| task_policies                  | Additional policies for the task role.                                                                                                    | `list(string)` | `[]`        | no          |
-| untagged_image_retention       | Retention period (after push) for untagged images, in days.                                                                               | `number`       | `14`        | no          |
-| use_target_group_port_suffix   | Whether to use the listener port as a suffix for the ALB listener rule. Useful if you way need to replace the target group at some point. | `bool`         | `false`     | no          |
-| version_parameter              | Optional SSM parameter to use for the image tag.                                                                                          | `string`       | `null`      | no          |
-| [volumes]                      | Volumes to mount in the container.                                                                                                        | `map(object)`  | `{}`        | no          |
+| Name                           | Description                                                                                                                                                                                                                        | Type           | Default     | Required    |
+| ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------- | ----------- | ----------- |
+| logging_key_id                 | KMS key to use for log encryption.                                                                                                                                                                                                 | `string`       | n/a         | yes         |
+| private_subnets                | List of private subnet CIDR blocks.                                                                                                                                                                                                | `list`         | n/a         | yes         |
+| project                        | Name of the project.                                                                                                                                                                                                               | `string`       | n/a         | yes         |
+| project_short                  | Short name for the project. Used in resource names with character limits.                                                                                                                                                          | `string`       | n/a         | yes         |
+| service                        | Service that these resources are supporting. Example: `"api"`, `"web"`, `"worker"`                                                                                                                                                 | `string`       | n/a         | yes         |
+| service_short                  | Short name for the service. Used in resource names with character limits.                                                                                                                                                          | `string`       | n/a         | yes         |
+| vpc_id                         | Id of the VPC to deploy into.                                                                                                                                                                                                      | `string`       | n/a         | yes         |
+| public_subnets                 | List of public subnet CIDR blocks. Required when creating a public endpoint.                                                                                                                                                       | `list`         | n/a         | conditional |
+| domain                         | Domain name for service. Required if creating an endpoint. Example: `"staging.service.org"`                                                                                                                                        | `string`       | `""`        | conditional |
+| image_url                      | URL of the container image. Required if not creating a repository.                                                                                                                                                                 | `string`       | `""`        | conditional |
+| [container_command]            | Command to run in the container. Defaults to the image's CMD.                                                                                                                                                                      | `list(string)` | `[]`        | no          |
+| container_port                 | Port the container listens on.                                                                                                                                                                                                     | `number`       | `80`        | no          |
+| create_endpoint                | Create an Application Load Balancer for the service. Required to serve traffic.                                                                                                                                                    | `bool`         | `true`      | no          |
+| create_repository              | Create an ECR repository to host the container image.                                                                                                                                                                              | `bool`         | `true`      | no          |
+| create_version_parameter       | Create an SSM parameter to store the active version for the image tag.                                                                                                                                                             | `bool`         | `false`     | no          |
+| cpu                            | CPU unit for this task.                                                                                                                                                                                                            | `number`       | `512`       | no          |
+| desired_containers             | Desired number of running containers for the service.                                                                                                                                                                              | `number`       | `1`         | no          |
+| enable_execute_command         | Enable the [ECS ExecuteCommand][ecs-exec] feature.                                                                                                                                                                                 | `bool`         | `false`     | no          |
+| environment                    | Environment for the project.                                                                                                                                                                                                       | `string`       | `"dev"`     | no          |
+| [environment_secrets]          | Secrets to be injected as environment variables into the container.                                                                                                                                                                | `map(string)`  | `{}`        | no          |
+| environment_variables          | Environment variables to be set on the container.                                                                                                                                                                                  | `map(string)`  | `{}`        | no          |
+| execution_policies             | Additional policies for the task execution role.                                                                                                                                                                                   | `list(string)` | `[]`        | no          |
+| force_delete                   | Force deletion of resources. If changing to true, be sure to apply before destroying.                                                                                                                                              | `bool`         | `false`     | no          |
+| force_new_deployment           | Force a new task deployment of the service.                                                                                                                                                                                        | `bool`         | `false`     | no          |
+| health_check_grace_period      | Time, in seconds, after a container comes into service before health checks must pass.                                                                                                                                             | `number`       | `300`       | no          |
+| health_check_path              | Application path to use for health checks.                                                                                                                                                                                         | `string`       | `"/health"` | no          |
+| hosted_zone_id                 | ID of the hosted zone for the domain, leave empty to have this module look it up.                                                                                                                                                  | `string`       | `null`      | no          |
+| image_tag                      | Tag of the container image to be deployed.                                                                                                                                                                                         | `string`       | `"latest"`  | no          |
+| image_tags_mutable             | Whether the container repository allows tags to be mutated.                                                                                                                                                                        | `bool`         | `false`     | no          |
+| ingress_cidrs                  | List of additional CIDR blocks to allow traffic from.                                                                                                                                                                              | `list`         | `[]`        | no          |
+| ingress_prefix_list_ids        | List of prefix list IDs to allow ingress from.                                                                                                                                                                                     | `list`         | `[]`        | no          |
+| key_recovery_period            | Recovery period for deleted KMS keys in days. Must be between `7` and `30`.                                                                                                                                                        | `number`       | `30`        | no          |
+| logging_bucket                 | S3 bucket to use for logging. If not provided, load balancer logs will not be created.                                                                                                                                             | `string`       | `null`      | no          |
+| logging_bucket_prefix          | Prefix for the S3 bucket to use for logging.                                                                                                                                                                                       | `string`       | `null`      | no          |
+| log_retention_period           | Retention period for CloudWatch Logs, in days.                                                                                                                                                                                     | `number`       | `30`        | no          |
+| [manage_performance_log_group] | Whether to manage the container insights performance log group for the service. Will default to `true` in a future release.                                                                                                        | `bool`         | `false`     | no          |
+| memory                         | Memory for this task.                                                                                                                                                                                                              | `number`       | `1024`      | no          |
+| [oidc_settings]                | OIDC connection settings for the service endpoint.                                                                                                                                                                                 | `object`       | `null`      | no          |
+| otel_config                    | Custom configuration, in YAML format, for the OpenTelemetry collector. If left empty, a default configuration will be used that sends all metrics, logs, and traces to the appropriate AWS services.                               | `string`       | `null`      | no          |
+| otel_log_level                 | Log level for the OpenTelemetry collector.                                                                                                                                                                                         | `string`       | `"info"`    | no          |
+| otel_secrets                   | Secrets to be injected as environment variables into the OpenTelemetry collector container. This is primarily used alongside a custom `otel_config`. Should be in the same format as [`environment_secrets`][environment_secrets]. | `map(string)`  | `{}`        | no          |
+| otel_collector_version         | Version of the AWS Distro for OpenTelemetry (ADOT) Collector to use. Defaults to `latest`, but it's recommended to pin this to a specific version.                                                                                 | `string`       | `"latest"`  | no          |
+| public                         | Whether the service should be exposed to the public Internet.                                                                                                                                                                      | `bool`         | `false`     | no          |
+| repository_arn                 | ARN of the ECR repository hosting the image. Only required if using a private repository, but not created here.                                                                                                                    | `string`       | `""`        | no          |
+| [secrets_manager_secrets]      | Map of secrets to be created in Secrets Manager.                                                                                                                                                                                   | `map(object)`  | `{}`        | no          |
+| stats_prefix                   | Prefix for statsd metrics. Defaults to `project`/`service`.                                                                                                                                                                        | `string`       | `""`        | no          |
+| subdomain                      | Optional subdomain for the service, to be appended to the domain for DNS.                                                                                                                                                          | `string`       | `""`        | no          |
+| tags                           | Optional tags to be applied to all resources.                                                                                                                                                                                      | `list`         | `[]`        | no          |
+| task_policies                  | Additional policies for the task role.                                                                                                                                                                                             | `list(string)` | `[]`        | no          |
+| untagged_image_retention       | Retention period (after push) for untagged images, in days.                                                                                                                                                                        | `number`       | `14`        | no          |
+| use_target_group_port_suffix   | Whether to use the listener port as a suffix for the ALB listener rule. Useful if you way need to replace the target group at some point.                                                                                          | `bool`         | `false`     | no          |
+| version_parameter              | Optional SSM parameter to use for the image tag.                                                                                                                                                                                   | `string`       | `null`      | no          |
+| [volumes]                      | Volumes to mount in the container.                                                                                                                                                                                                 | `map(object)`  | `{}`        | no          |
 
 ### container_command
 
@@ -303,6 +351,7 @@ volumes = {
 | task_role_arn              | ARN of the role attached to the running tasks.                          | `string`       |
 | version_parameter          | Name of the SSM parameter, if one exists, to store the current version. | `string`       |
 
+[adot]: https://github.com/aws-observability/aws-otel-collector
 [badge-release]: https://img.shields.io/github/v/release/codeforamerica/tofu-modules-aws-fargate-service?logo=github&label=Latest%20Release
 [container_command]: #container_command
 [ecs-exec]: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-exec.html
@@ -311,6 +360,8 @@ volumes = {
 [latest-release]: https://github.com/codeforamerica/tofu-modules-aws-fargate-service/releases/latest
 [manage_performance_log_group]: #manage_performance_log_group
 [oidc_settings]: #oidc_settings
+[otel]: https://opentelemetry.io/docs/concepts/instrumentation/
+[otel-log-levels]: https://docs.oracle.com/javase/7/docs/api/java/util/logging/Level.html
 [secrets]: https://github.com/codeforamerica/tofu-modules-aws-secrets
 [secrets-manager]: https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html
 [secrets_manager_secrets]: #secrets_manager_secrets

@@ -24,7 +24,9 @@ variable "create_repository" {
 
 variable "create_version_parameter" {
   type        = bool
-  description = "Create an SSM parameter to store the active version for the image tag."
+  description = <<-EOT
+    Create an SSM parameter to store the active version for the image tag.
+    EOT
   default     = false
 }
 
@@ -60,7 +62,10 @@ variable "environment" {
 
 variable "environment_secrets" {
   type        = map(string)
-  description = "Secrets to be injected as environment variables on the container."
+  description = <<-EOT
+    Secrets to be injected as environment variables on the container. Should be
+    in the same format as `environment_secrets`.
+    EOT
   default     = {}
 }
 
@@ -78,7 +83,10 @@ variable "execution_policies" {
 
 variable "force_delete" {
   type        = bool
-  description = "Force deletion of resources. If changing to true, be sure to apply before destroying."
+  description = <<-EOT
+    Force deletion of resources. If changing to true, be sure to apply before
+    destroying.
+    EOT
   default     = false
 }
 
@@ -90,7 +98,10 @@ variable "force_new_deployment" {
 
 variable "health_check_grace_period" {
   type        = number
-  description = "Time, in seconds, after a container comes into service before health checks must pass."
+  description = <<-EOT
+    Time, in seconds, after a container comes into service before health checks
+    must pass.
+    EOT
   default     = 300
 }
 
@@ -102,7 +113,10 @@ variable "health_check_path" {
 
 variable "hosted_zone_id" {
   type        = string
-  description = "ID of the hosted zone for the domain, leave empty to have this module look it up."
+  description = <<-EOT
+    ID of the hosted zone for the domain, leave empty to have this module look
+    it up.
+    EOT
   default     = null
 }
 
@@ -114,7 +128,9 @@ variable "image_tag" {
 
 variable "image_url" {
   type        = string
-  description = "Source for the image to be deployed. Required if not creating a repository."
+  description = <<-EOT
+    Source for the image to be deployed. Required if not creating a repository.
+    EOT
   default     = ""
 }
 
@@ -139,7 +155,9 @@ variable "ingress_prefix_list_ids" {
 variable "key_recovery_period" {
   type        = number
   default     = 30
-  description = "Recovery period for deleted KMS keys in days. Must be between 7 and 30."
+  description = <<-EOT
+    Recovery period for deleted KMS keys in days. Must be between `7` and `30`.
+    EOT
 
   validation {
     condition     = var.key_recovery_period > 6 && var.key_recovery_period < 31
@@ -149,7 +167,10 @@ variable "key_recovery_period" {
 
 variable "logging_bucket" {
   type        = string
-  description = "S3 bucket to use for logging. If not provided, load balancer logs will not be created."
+  description = <<-EOT
+    S3 bucket to use for logging. If not provided, load balancer logs will not
+    be created.
+    EOT
   default     = null
 }
 
@@ -172,7 +193,10 @@ variable "log_retention_period" {
 
 variable "manage_performance_log_group" {
   type        = bool
-  description = "Whether to manage the container insights performance log group for the service. Will default to `true` in a future release."
+  description = <<-EOT
+    Whether to manage the container insights performance log group for the
+    service. Will default to `true` in a future release.
+    EOT
   default     = false
 }
 
@@ -206,10 +230,40 @@ variable "oidc_settings" {
   }
 }
 
+variable "otel_collector_version" {
+  type        = string
+  description = <<-EOT
+    Version of the AWS Distro for OpenTelemetry (ADOT) Collector to use.
+    Defaults to `latest`, but it's recommended to pin this to a specific
+    version.
+    EOT
+  default     = "latest"
+}
+
+variable "otel_config" {
+  type        = string
+  description = <<-EOT
+    Custom configuration, in YAML format, for the OpenTelemetry collector. If
+    left empty, a default configuration will be used that sends all metrics,
+    logs, and traces to the appropriate AWS services.
+    EOT
+  default     = null
+}
+
 variable "otel_log_level" {
   type        = string
   description = "Log level for the OpenTelemetry collector."
   default     = "info"
+}
+
+variable "otel_secrets" {
+  type        = map(string)
+  description = <<-EOT
+    Secrets to be injected as environment variables into the OpenTelemetry
+    collector container. This is primarily used alongside a custom
+    `otel_config`. Should be in the same format as `environment_secrets`.
+    EOT
+  default     = {}
 }
 
 variable "private_subnets" {
@@ -235,7 +289,9 @@ variable "project" {
 
 variable "project_short" {
   type        = string
-  description = "Short name for the project. Used in resource names with character limits."
+  description = <<-EOT
+    Short name for the project. Used in resource names with character limits.
+    EOT
 }
 
 variable "public" {
@@ -246,13 +302,18 @@ variable "public" {
 
 variable "public_subnets" {
   type        = list(string)
-  description = "List of public subnets. Required when creating a public endpoint."
+  description = <<-EOT
+    List of public subnets. Required when creating a public endpoint.
+    EOT
   default     = []
 }
 
 variable "repository_arn" {
   type        = string
-  description = "ARN of the ECR repository the image resides in. Only required if using a private repository, but not creating it here."
+  description = <<-EOT
+    ARN of the ECR repository the image resides in. Only required if using a
+    private repository, but not creating it here.
+    EOT
   default     = null
 }
 
@@ -271,12 +332,16 @@ variable "secrets_manager_secrets" {
 
 variable "service" {
   type        = string
-  description = "Service that these resources are supporting. Example: 'api', 'web', 'worker'"
+  description = <<-EOT
+    Service that these resources are supporting. Example: 'api', 'web', 'worker'
+    EOT
 }
 
 variable "service_short" {
   type        = string
-  description = "Short name for the service. Used in resource names with character limits."
+  description = <<-EOT
+    Short name for the service. Used in resource names with character limits.
+    EOT
 }
 
 variable "stats_prefix" {

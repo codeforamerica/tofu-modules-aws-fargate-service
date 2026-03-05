@@ -33,8 +33,13 @@ locals {
     })
   }
 
+  otel_config = var.otel_config != null ? var.otel_config : templatefile("${path.module}/templates/aws-otel-config.yaml.tftpl", {
+    app_namespace = local.stats_prefix
+  })
+
+  # We need to make sure the service has access to all the provided secrets.
   authorized_secrets = [
-    for key, value in var.environment_secrets :
+    for value in concat(values(var.environment_secrets), values(var.otel_secrets)) :
     (startswith(value, "arn:")
       ? (length(split(":", value)) > 7 ? join(":", slice(split(":", value), 0, 7)) : value)
     : module.secrets_manager[split(":", value)[0]].secret_arn)
