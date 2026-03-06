@@ -23,9 +23,7 @@ resource "aws_ssm_parameter" "otel_config" {
   type        = "String"
   overwrite   = true
 
-  value = templatefile("${path.module}/templates/aws-otel-config.yaml.tftpl", {
-    app_namespace = local.stats_prefix
-  })
+  value = local.otel_config
 
   tags = var.tags
 }

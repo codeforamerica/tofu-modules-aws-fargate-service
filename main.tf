@@ -157,7 +157,9 @@ module "ecs_service" {
       namespace         = "${var.project}/${var.service}"
       env_vars          = var.environment_variables
       otel_log_level    = var.otel_log_level
+      otel_secrets      = var.otel_secrets
       otel_ssm_arn      = aws_ssm_parameter.otel_config.arn
+      otel_version      = var.otel_collector_version
       volumes           = var.volumes
 
       # Split defined secrets on ":" and use the name to get the arn.
