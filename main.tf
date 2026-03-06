@@ -142,8 +142,12 @@ module "ecs_service" {
   enable_execute_command            = var.enable_execute_command
   health_check_grace_period_seconds = var.health_check_grace_period
   force_delete                      = var.force_delete
+
+  enable_circuit_breaker            = var.enable_circuit_breaker
+  enable_circuit_breaker_rollback   = var.enable_circuit_breaker_rollback
   force_new_deployment              = var.force_new_deployment
   triggers                          = { redeploy = var.force_new_deployment ? plantimestamp() : "false" }
+  wait_for_steady_state             = var.wait_for_steady_state
 
   container_definitions = jsonencode(yamldecode(templatefile(
     "${path.module}/templates/container_definitions.yaml.tftpl", {

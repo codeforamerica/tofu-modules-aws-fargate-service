@@ -48,6 +48,24 @@ variable "domain" {
   default     = ""
 }
 
+variable "enable_circuit_breaker" {
+  type        = bool
+  description = <<-EOT
+    Enable ECS deployment circuit breaker to detect failed deployments.
+    EOT
+  default     = false
+}
+
+variable "enable_circuit_breaker_rollback" {
+  type        = bool
+  description = <<-EOT
+    Enable rollback of the service when the circuit breaker is triggered.
+    This will roll back the service to the previous version. Only used if
+    `enable_circuit_breaker` is `true`.
+    EOT
+  default     = false
+}
+
 variable "enable_container_insights_enhanced" {
   type        = bool
   description = "Enable enhanced container insights for the service."
@@ -409,4 +427,15 @@ variable "volumes" {
 variable "vpc_id" {
   type        = string
   description = "Id of the VPC to deploy into."
+}
+
+variable "wait_for_steady_state" {
+  type        = bool
+  description = <<-EOT
+    Whether to wait for the service to reach a steady state before considering
+    the deployment successful. It's highly recommend that you set
+    `enable_circuit_breaker` to `true` when using this option to avoid OpenTofu
+    from timing out.
+    EOT
+  default     = false
 }
