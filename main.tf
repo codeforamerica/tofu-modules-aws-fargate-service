@@ -87,8 +87,8 @@ module "endpoint_security_group" {
 # TODO: Determine how we can best restrict the egress rules.
 #trivy:ignore:avd-aws-0104
 module "task_security_group" {
-  source  = "terraform-aws-modules/security-group/aws"
-  version = "~> 5.1"
+  source     = "terraform-aws-modules/security-group/aws"
+  version    = "~> 5.1"
   depends_on = [module.endpoint_security_group.security_group_id]
 
   name   = "${local.prefix}-endpoint"
@@ -143,11 +143,12 @@ module "ecs_service" {
   health_check_grace_period_seconds = var.health_check_grace_period
   force_delete                      = var.force_delete
 
-  enable_circuit_breaker            = var.enable_circuit_breaker
-  enable_circuit_breaker_rollback   = var.enable_circuit_breaker_rollback
-  force_new_deployment              = var.force_new_deployment
-  triggers                          = { redeploy = var.force_new_deployment ? plantimestamp() : "false" }
-  wait_for_steady_state             = var.wait_for_steady_state
+  enable_deployment_circuit_breaker_with_rollback    = var.enable_circuit_breaker && var.enable_circuit_breaker_rollback
+  enable_deployment_circuit_breaker_without_rollback = var.enable_circuit_breaker && !var.enable_circuit_breaker_rollback
+
+  force_new_deployment  = var.force_new_deployment
+  triggers              = { redeploy = var.force_new_deployment ? plantimestamp() : "false" }
+  wait_for_steady_state = var.wait_for_steady_state
 
   container_definitions = jsonencode(yamldecode(templatefile(
     "${path.module}/templates/container_definitions.yaml.tftpl", {

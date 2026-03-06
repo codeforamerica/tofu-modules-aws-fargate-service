@@ -1,6 +1,6 @@
 locals {
-  fqdn              = var.subdomain != "" ? "${var.subdomain}.${var.domain}" : var.domain
-  hosted_zone_id    = (!var.create_endpoint
+  fqdn = var.subdomain != "" ? "${var.subdomain}.${var.domain}" : var.domain
+  hosted_zone_id = (!var.create_endpoint
     ? null
     : (var.hosted_zone_id == null ? data.aws_route53_zone.domain["this"].zone_id : var.hosted_zone_id)
   )
