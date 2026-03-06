@@ -48,6 +48,12 @@ variable "domain" {
   default     = ""
 }
 
+variable "enable_container_insights_enhanced" {
+  type        = bool
+  description = "Enable enhanced container insights for the service."
+  default     = true
+}
+
 variable "enable_execute_command" {
   type        = bool
   description = "Enable ECS Exec for tasks within the service."

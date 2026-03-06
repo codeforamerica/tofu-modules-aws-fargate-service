@@ -114,9 +114,10 @@ module "ecs" {
   source  = "HENNGE/ecs/aws"
   version = "~> 5.5"
 
-  name                      = local.prefix
-  capacity_providers        = ["FARGATE"]
-  enable_container_insights = true
+  name                        = local.prefix
+  capacity_providers          = ["FARGATE"]
+  enable_container_insights   = true
+  container_insights_enhanced = var.enable_container_insights_enhanced
 
   tags = var.tags
 }
