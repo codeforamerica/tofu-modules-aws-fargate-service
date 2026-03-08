@@ -158,6 +158,37 @@ Additionally, to help debug OTEL related issues, you can override the log level
 by setting `otel_log_level` to a valid [java.util.logging log
 level][otel-log-levels].
 
+### Resource Allocation
+
+The `cpu` and `memory` variables define the total resources for the entire
+Fargate task, not just your application container. Sidecar containers reserve a
+portion of these resources, and the remainder is allocated to your application.
+
+The OpenTelemetry collector sidecar is always included and reserves a fixed
+amount. The AppConfig Agent sidecar reserves additional resources when enabled.
+
+| Container          | CPU (units) | Memory (MiB) | Condition          |
+| ------------------ | ----------- | ------------ | ------------------ |
+| OTEL Collector     | 256         | 512          | Always included    |
+| AppConfig Agent    | 64          | 128          | When enabled       |
+| **Your application** | **Remainder** | **Remainder** |                  |
+
+For example, with the defaults of `cpu = 512` and `memory = 1024`:
+
+| Configuration             | App CPU | App Memory |
+| ------------------------- | ------- | ---------- |
+| AppConfig agent disabled  | 256     | 512 MiB    |
+| AppConfig agent enabled   | 192     | 384 MiB    |
+
+> [!IMPORTANT]
+> If your application needs more resources, increase the task-level `cpu` and
+> `memory` values rather than reducing sidecar allocations. Fargate task sizes
+> must conform to [supported CPU and memory
+> values][fargate-task-sizes].
+
+The AppConfig Agent sidecar resources can be adjusted with
+`appconfig_agent_cpu` and `appconfig_agent_memory` if needed.
+
 ## Inputs
 
 > [!CAUTION]
@@ -405,6 +436,7 @@ volumes = {
 [badge-release]: https://img.shields.io/github/v/release/codeforamerica/tofu-modules-aws-fargate-service?logo=github&label=Latest%20Release
 [container_command]: #container_command
 [ecs-exec]: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-exec.html
+[fargate-task-sizes]: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definition_parameters.html#task_size
 [enable_appconfig_agent]: #aws-appconfig-agent
 [environment_secrets]: #environment_secrets
 [import]: https://opentofu.org/docs/cli/import/
