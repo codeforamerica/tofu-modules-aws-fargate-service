@@ -79,6 +79,40 @@ this module offers three ways to define the current image version:
    allows for easier initial deployment and migration to using the SSM
    parameter.
 
+### AWS AppConfig Agent
+
+This module supports an optional [AWS AppConfig Agent][appconfig-agent] sidecar
+container. The agent runs alongside your application, caching configuration
+locally and serving it over HTTP on `localhost`. This enables live configuration
+updates without redeploying your service.
+
+To enable the agent, set `enable_appconfig_agent` to `true`:
+
+```hcl
+enable_appconfig_agent = true
+
+appconfig_agent_environment_variables = {
+  PREFETCH_LIST = "/applications/example-application/environments/dev/configurations/feature-flags"
+}
+```
+
+The agent requires the `appconfig:StartConfigurationSession` and
+`appconfig:GetLatestConfiguration` IAM permissions. These are automatically
+added to the task role when the agent is enabled.
+
+Your application retrieves configuration by making HTTP GET requests to
+`http://localhost:2772/applications/{app}/environments/{env}/configurations/{profile}`.
+The port can be customized with `appconfig_agent_port`.
+
+| Name                                  | Description                                                                       | Type          | Default | Required |
+| ------------------------------------- | --------------------------------------------------------------------------------- | ------------- | ------- | -------- |
+| enable_appconfig_agent                | Enable the AWS AppConfig Agent sidecar container.                                 | `bool`        | `false` | no       |
+| appconfig_agent_cpu                   | CPU units for the AppConfig Agent sidecar.                                        | `number`      | `64`    | no       |
+| appconfig_agent_environment_variables | Environment variables for the AppConfig Agent sidecar.                            | `map(string)` | `{}`    | no       |
+| appconfig_agent_memory                | Memory (in MiB) for the AppConfig Agent sidecar.                                  | `number`      | `128`   | no       |
+| appconfig_agent_port                  | Port for the AppConfig Agent HTTP server.                                         | `number`      | `2772`  | no       |
+| appconfig_agent_version               | Version of the AWS AppConfig Agent image. Pin for production stability.            | `string`      | `"2.x"` | no       |
+
 ### Configuring OpenTelemetry
 
 The container definition produced by this module includes a sidecar of the
@@ -144,6 +178,11 @@ level][otel-log-levels].
 | public_subnets                     | List of public subnet CIDR blocks. Required when creating a public endpoint.                                                                                                                                                          | `list`         | n/a         | conditional |
 | domain                             | Domain name for service. Required if creating an endpoint. Example: `"staging.service.org"`                                                                                                                                           | `string`       | `""`        | conditional |
 | image_url                          | URL of the container image. Required if not creating a repository.                                                                                                                                                                    | `string`       | `""`        | conditional |
+| [appconfig_agent_cpu]              | CPU units for the AppConfig Agent sidecar. Only used when `enable_appconfig_agent` is `true`.                                                                                                                                         | `number`       | `64`        | no          |
+| [appconfig_agent_environment_variables] | Environment variables for the AppConfig Agent sidecar. Only used when `enable_appconfig_agent` is `true`.                                                                                                                        | `map(string)`  | `{}`        | no          |
+| [appconfig_agent_memory]           | Memory (in MiB) for the AppConfig Agent sidecar. Only used when `enable_appconfig_agent` is `true`.                                                                                                                                   | `number`       | `128`       | no          |
+| [appconfig_agent_port]             | Port for the AppConfig Agent HTTP server. Only used when `enable_appconfig_agent` is `true`.                                                                                                                                          | `number`       | `2772`      | no          |
+| [appconfig_agent_version]          | Version of the AWS AppConfig Agent image. Pin to a specific version for production stability.                                                                                                                                         | `string`       | `"2.x"`     | no          |
 | [container_command]                | Command to run in the container. Defaults to the image's CMD.                                                                                                                                                                         | `list(string)` | `[]`        | no          |
 | container_port                     | Port the container listens on.                                                                                                                                                                                                        | `number`       | `80`        | no          |
 | create_endpoint                    | Create an Application Load Balancer for the service. Required to serve traffic.                                                                                                                                                       | `bool`         | `true`      | no          |
@@ -151,6 +190,7 @@ level][otel-log-levels].
 | create_version_parameter           | Create an SSM parameter to store the active version for the image tag.                                                                                                                                                                | `bool`         | `false`     | no          |
 | cpu                                | CPU unit for this task.                                                                                                                                                                                                               | `number`       | `512`       | no          |
 | desired_containers                 | Desired number of running containers for the service.                                                                                                                                                                                 | `number`       | `1`         | no          |
+| [enable_appconfig_agent]           | Enable an AWS AppConfig Agent sidecar container for live configuration updates.                                                                                                                                                       | `bool`         | `false`     | no          |
 | enable_circuit_breaker             | Enable ECS deployment circuit breaker to detect failed deployments.                                                                                                                                                                   | `bool`         | `false`     | no          |
 | enable_circuit_breaker_rollback    | Enable rollback of the service when the circuit breaker is triggered. This will roll back the service to the previous version. Only used if `enable_circuit_breaker` is `true`.                                                       | `bool`         | `false`     | no          |
 | enable_container_insights_enhanced | Enable enhanced container insights for the service.                                                                                                                                                                                   | `bool`         | `true`      | no          |
@@ -356,9 +396,16 @@ volumes = {
 | version_parameter          | Name of the SSM parameter, if one exists, to store the current version. | `string`       |
 
 [adot]: https://github.com/aws-observability/aws-otel-collector
+[appconfig-agent]: https://docs.aws.amazon.com/appconfig/latest/userguide/appconfig-integration-containers-agent.html
+[appconfig_agent_cpu]: #aws-appconfig-agent
+[appconfig_agent_environment_variables]: #aws-appconfig-agent
+[appconfig_agent_memory]: #aws-appconfig-agent
+[appconfig_agent_port]: #aws-appconfig-agent
+[appconfig_agent_version]: #aws-appconfig-agent
 [badge-release]: https://img.shields.io/github/v/release/codeforamerica/tofu-modules-aws-fargate-service?logo=github&label=Latest%20Release
 [container_command]: #container_command
 [ecs-exec]: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-exec.html
+[enable_appconfig_agent]: #aws-appconfig-agent
 [environment_secrets]: #environment_secrets
 [import]: https://opentofu.org/docs/cli/import/
 [latest-release]: https://github.com/codeforamerica/tofu-modules-aws-fargate-service/releases/latest

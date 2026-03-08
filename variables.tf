@@ -1,3 +1,51 @@
+variable "appconfig_agent_cpu" {
+  type        = number
+  description = <<-EOT
+    CPU units for the AppConfig Agent sidecar container. Only used when
+    `enable_appconfig_agent` is `true`.
+    EOT
+  default     = 64
+}
+
+variable "appconfig_agent_environment_variables" {
+  type        = map(string)
+  description = <<-EOT
+    Environment variables for the AppConfig Agent sidecar. Use this to
+    configure agent behavior such as PREFETCH_LIST, LOG_LEVEL, or
+    POLL_INTERVAL. Only used when `enable_appconfig_agent` is `true`.
+    EOT
+  default     = {}
+}
+
+variable "appconfig_agent_memory" {
+  type        = number
+  description = <<-EOT
+    Memory (in MiB) for the AppConfig Agent sidecar container. Only used
+    when `enable_appconfig_agent` is `true`.
+    EOT
+  default     = 128
+}
+
+variable "appconfig_agent_port" {
+  type        = number
+  description = <<-EOT
+    Port for the AppConfig Agent HTTP server. The application retrieves
+    configuration by calling http://localhost:<port>. Only used when
+    `enable_appconfig_agent` is `true`.
+    EOT
+  default     = 2772
+}
+
+variable "appconfig_agent_version" {
+  type        = string
+  description = <<-EOT
+    Version of the AWS AppConfig Agent image to use. Defaults to `2.x`,
+    which tracks the latest 2.x release. Pin to a specific version for
+    production stability.
+    EOT
+  default     = "2.x"
+}
+
 variable "container_command" {
   type        = list(string)
   description = "Command to run in the container. Defaults to the image's CMD."
@@ -46,6 +94,16 @@ variable "domain" {
   type        = string
   description = "Domain name for the service. Required if creating an endpoint."
   default     = ""
+}
+
+variable "enable_appconfig_agent" {
+  type        = bool
+  description = <<-EOT
+    Enable an AWS AppConfig Agent sidecar container. The agent caches
+    configuration locally and serves it to the application over HTTP,
+    enabling live configuration updates without redeployment.
+    EOT
+  default     = false
 }
 
 variable "enable_circuit_breaker" {

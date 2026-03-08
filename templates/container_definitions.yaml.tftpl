@@ -25,6 +25,11 @@
   portMappings:
     - containerPort: ${container_port}
   %{~ endif ~}
+  %{~ if enable_appconfig_agent ~}
+  dependsOn:
+    - containerName: appconfig-agent
+      condition: START
+  %{~ endif ~}
   environment:
     %{~ for key, value in env_vars ~}
     - name: ${key}
@@ -35,6 +40,27 @@
     - name: ${key}
       valueFrom: "${value}"
     %{~ endfor ~}
+%{~ if enable_appconfig_agent ~}
+- name: appconfig-agent
+  image: public.ecr.aws/aws-appconfig/aws-appconfig-agent:${appconfig_agent_version}
+  cpu: ${appconfig_agent_cpu}
+  memory: ${appconfig_agent_memory}
+  memoryReservation: ${appconfig_agent_memory}
+  essential: false
+  logConfiguration:
+    logDriver: awslogs
+    options:
+      awslogs-group: "${log_group}"
+      awslogs-region: "${region}"
+      awslogs-stream-prefix: "appconfig-agent"
+  portMappings:
+    - containerPort: ${appconfig_agent_port}
+  environment:
+    %{~ for key, value in appconfig_agent_env_vars ~}
+    - name: ${key}
+      value: "${value}"
+    %{~ endfor ~}
+%{~ endif ~}
 - name: otel-collector
   image: public.ecr.aws/aws-observability/aws-otel-collector:${otel_version}
   memory: 512

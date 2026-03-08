@@ -74,6 +74,29 @@ resource "aws_iam_role" "task" {
   tags = var.tags
 }
 
+resource "aws_iam_policy" "appconfig" {
+  for_each = var.enable_appconfig_agent ? toset(["this"]) : toset([])
+
+  name        = "${local.prefix}-appconfig"
+  description = "Allow ${var.service} to retrieve configuration from AWS AppConfig for ${var.project} ${var.environment}."
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "appconfig:StartConfigurationSession",
+          "appconfig:GetLatestConfiguration"
+        ]
+        Resource = "arn:${data.aws_partition.current.partition}:appconfig:${data.aws_region.current.name}:${data.aws_caller_identity.identity.account_id}:application/*/environment/*/configuration/*"
+      }
+    ]
+  })
+
+  tags = var.tags
+}
+
 resource "aws_iam_role_policy_attachments_exclusive" "task" {
   role_name = aws_iam_role.task.name
   policy_arns = concat([
@@ -81,5 +104,5 @@ resource "aws_iam_role_policy_attachments_exclusive" "task" {
     "arn:${data.aws_partition.current.partition}:iam::aws:policy/CloudWatchFullAccess",
     "arn:${data.aws_partition.current.partition}:iam::aws:policy/AmazonSSMFullAccess",
     "arn:${data.aws_partition.current.partition}:iam::aws:policy/CloudWatchAgentServerPolicy",
-  ], var.task_policies)
+  ], var.enable_appconfig_agent ? [aws_iam_policy.appconfig["this"].arn] : [], var.task_policies)
 }
