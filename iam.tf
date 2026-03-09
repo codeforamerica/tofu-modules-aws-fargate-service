@@ -89,7 +89,14 @@ resource "aws_iam_policy" "appconfig" {
           "appconfig:StartConfigurationSession",
           "appconfig:GetLatestConfiguration"
         ]
-        Resource = "arn:${data.aws_partition.current.partition}:appconfig:${data.aws_region.current.name}:${data.aws_caller_identity.identity.account_id}:application/*/environment/*/configuration/*"
+        Resource = join(":", [
+          "arn",
+          data.aws_partition.current.partition,
+          "appconfig",
+          data.aws_region.current.name,
+          data.aws_caller_identity.identity.account_id,
+          "application/*/environment/*/configuration/*"
+        ])
       }
     ]
   })
