@@ -111,7 +111,7 @@ The port can be customized with `appconfig_agent_port`.
 | appconfig_agent_environment_variables | Environment variables for the AppConfig Agent sidecar.                            | `map(string)` | `{}`    | no       |
 | appconfig_agent_memory                | Memory (in MiB) for the AppConfig Agent sidecar.                                  | `number`      | `128`   | no       |
 | appconfig_agent_port                  | Port for the AppConfig Agent HTTP server.                                         | `number`      | `2772`  | no       |
-| appconfig_agent_version               | Version of the AWS AppConfig Agent image. Pin for production stability.            | `string`      | `"2.x"` | no       |
+| appconfig_agent_version               | Version of the AWS AppConfig Agent image. Pin for production stability.           | `string`      | `"2.x"` | no       |
 
 ### Configuring OpenTelemetry
 
@@ -167,11 +167,11 @@ portion of these resources, and the remainder is allocated to your application.
 The OpenTelemetry collector sidecar is always included and reserves a fixed
 amount. The AppConfig Agent sidecar reserves additional resources when enabled.
 
-| Container          | CPU (units) | Memory (MiB) | Condition          |
-| ------------------ | ----------- | ------------ | ------------------ |
-| OTEL Collector     | 256         | 512          | Always included    |
-| AppConfig Agent    | 64          | 128          | When enabled       |
-| **Your application** | **Remainder** | **Remainder** |                  |
+| Container            | CPU (units)   | Memory (MiB)    | Condition       |
+|----------------------|---------------|-----------------|-----------------|
+| OTEL Collector       | 256           | 512             | Always included |
+| AppConfig Agent      | 64            | 128             | When enabled    |
+| **Your application** | **Remainder** | **Remainder**   |                 |
 
 For example, with the defaults of `cpu = 512` and `memory = 1024`:
 
