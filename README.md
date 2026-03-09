@@ -203,9 +203,7 @@ the AppConfig Agent is enabled.
 | public_subnets                          | List of public subnet CIDR blocks. Required when creating a public endpoint.                                                                                                                                                          | `list`         | n/a         | conditional |
 | domain                                  | Domain name for service. Required if creating an endpoint. Example: `"staging.service.org"`                                                                                                                                           | `string`       | `""`        | conditional |
 | image_url                               | URL of the container image. Required if not creating a repository.                                                                                                                                                                    | `string`       | `""`        | conditional |
-| [appconfig_agent_cpu]                   | CPU units for the AppConfig Agent sidecar. Only used when `enable_appconfig_agent` is `true`.                                                                                                                                         | `number`       | `64`        | no          |
 | [appconfig_agent_environment_variables] | Environment variables for the AppConfig Agent sidecar. Only used when `enable_appconfig_agent` is `true`.                                                                                                                             | `map(string)`  | `{}`        | no          |
-| [appconfig_agent_memory]                | Memory (in MiB) for the AppConfig Agent sidecar. Only used when `enable_appconfig_agent` is `true`.                                                                                                                                   | `number`       | `128`       | no          |
 | [appconfig_agent_port]                  | Port for the AppConfig Agent HTTP server. Only used when `enable_appconfig_agent` is `true`.                                                                                                                                          | `number`       | `2772`      | no          |
 | [appconfig_agent_version]               | Version of the AWS AppConfig Agent image. Pin to a specific version for production stability.                                                                                                                                         | `string`       | `"2.x"`     | no          |
 | [container_command]                     | Command to run in the container. Defaults to the image's CMD.                                                                                                                                                                         | `list(string)` | `[]`        | no          |
@@ -422,9 +420,7 @@ volumes = {
 
 [adot]: https://github.com/aws-observability/aws-otel-collector
 [appconfig-agent]: https://docs.aws.amazon.com/appconfig/latest/userguide/appconfig-integration-containers-agent.html
-[appconfig_agent_cpu]: #aws-appconfig-agent
 [appconfig_agent_environment_variables]: #aws-appconfig-agent
-[appconfig_agent_memory]: #aws-appconfig-agent
 [appconfig_agent_port]: #aws-appconfig-agent
 [appconfig_agent_version]: #aws-appconfig-agent
 [badge-release]: https://img.shields.io/github/v/release/codeforamerica/tofu-modules-aws-fargate-service?logo=github&label=Latest%20Release
