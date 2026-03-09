@@ -1,12 +1,3 @@
-variable "appconfig_agent_cpu" {
-  type        = number
-  description = <<-EOT
-    CPU units for the AppConfig Agent sidecar container. Only used when
-    `enable_appconfig_agent` is `true`.
-    EOT
-  default     = 64
-}
-
 variable "appconfig_agent_environment_variables" {
   type        = map(string)
   description = <<-EOT
@@ -15,15 +6,6 @@ variable "appconfig_agent_environment_variables" {
     POLL_INTERVAL. Only used when `enable_appconfig_agent` is `true`.
     EOT
   default     = {}
-}
-
-variable "appconfig_agent_memory" {
-  type        = number
-  description = <<-EOT
-    Memory (in MiB) for the AppConfig Agent sidecar container. Only used
-    when `enable_appconfig_agent` is `true`.
-    EOT
-  default     = 128
 }
 
 variable "appconfig_agent_port" {

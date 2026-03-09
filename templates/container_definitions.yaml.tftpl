@@ -43,9 +43,6 @@
 %{~ if enable_appconfig_agent ~}
 - name: appconfig-agent
   image: public.ecr.aws/aws-appconfig/aws-appconfig-agent:${appconfig_agent_version}
-  cpu: ${appconfig_agent_cpu}
-  memory: ${appconfig_agent_memory}
-  memoryReservation: ${appconfig_agent_memory}
   essential: false
   logConfiguration:
     logDriver: awslogs

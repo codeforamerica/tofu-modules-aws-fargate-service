@@ -153,8 +153,8 @@ module "ecs_service" {
   container_definitions = jsonencode(yamldecode(templatefile(
     "${path.module}/templates/container_definitions.yaml.tftpl", {
       name              = local.prefix
-      cpu               = var.cpu - 256 - (var.enable_appconfig_agent ? var.appconfig_agent_cpu : 0)
-      memory            = var.memory - 512 - (var.enable_appconfig_agent ? var.appconfig_agent_memory : 0)
+      cpu               = var.cpu - 256
+      memory            = var.memory - 512
       image             = "${local.image_url}:${local.image_tag}"
       container_command = var.container_command
       container_port    = var.container_port
@@ -171,8 +171,6 @@ module "ecs_service" {
       enable_appconfig_agent   = var.enable_appconfig_agent
       appconfig_agent_version  = var.appconfig_agent_version
       appconfig_agent_port     = var.appconfig_agent_port
-      appconfig_agent_cpu      = var.appconfig_agent_cpu
-      appconfig_agent_memory   = var.appconfig_agent_memory
       appconfig_agent_env_vars = var.appconfig_agent_environment_variables
 
       # Split defined secrets on ":" and use the name to get the arn.
