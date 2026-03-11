@@ -104,12 +104,13 @@ Your application retrieves configuration by making HTTP GET requests to
 `http://localhost:2772/applications/{app}/environments/{env}/configurations/{profile}`.
 The port can be customized with `appconfig_agent_port`.
 
-| Name                                  | Description                                                             | Type          | Default | Required |
-|---------------------------------------|-------------------------------------------------------------------------|---------------|---------|----------|
-| enable_appconfig_agent                | Enable the AWS AppConfig Agent sidecar container.                       | `bool`        | `false` | no       |
-| appconfig_agent_environment_variables | Environment variables for the AppConfig Agent sidecar.                  | `map(string)` | `{}`    | no       |
-| appconfig_agent_port                  | Port for the AppConfig Agent HTTP server.                               | `number`      | `2772`  | no       |
-| appconfig_agent_version               | Version of the AWS AppConfig Agent image. Pin for production stability. | `string`      | `"2.x"` | no       |
+| Name                                  | Description                                                                  | Type          | Default | Required    |
+|---------------------------------------|------------------------------------------------------------------------------|---------------|---------|-------------|
+| enable_appconfig_agent                | Enable the AWS AppConfig Agent sidecar container.                            | `bool`        | `false` | no          |
+| appconfig_agent_application_id        | AppConfig application ID to scope IAM permissions.                           | `string`      | `""`    | conditional |
+| appconfig_agent_environment_variables | Environment variables for the AppConfig Agent sidecar.                       | `map(string)` | `{}`    | no          |
+| appconfig_agent_port                  | Port for the AppConfig Agent HTTP server.                                    | `number`      | `2772`  | no          |
+| appconfig_agent_version               | Version of the AWS AppConfig Agent image. Pin for production stability.      | `string`      | `"2.x"` | no          |
 
 ### Configuring OpenTelemetry
 
@@ -203,6 +204,7 @@ the AppConfig Agent is enabled.
 | public_subnets                          | List of public subnet CIDR blocks. Required when creating a public endpoint.                                                                                                                                                          | `list`         | n/a         | conditional |
 | domain                                  | Domain name for service. Required if creating an endpoint. Example: `"staging.service.org"`                                                                                                                                           | `string`       | `""`        | conditional |
 | image_url                               | URL of the container image. Required if not creating a repository.                                                                                                                                                                    | `string`       | `""`        | conditional |
+| [appconfig_agent_application_id]        | AppConfig application ID to scope IAM permissions. Required when `enable_appconfig_agent` is `true`.                                                                                                                                  | `string`       | `""`        | conditional |
 | [appconfig_agent_environment_variables] | Environment variables for the AppConfig Agent sidecar. Only used when `enable_appconfig_agent` is `true`.                                                                                                                             | `map(string)`  | `{}`        | no          |
 | [appconfig_agent_port]                  | Port for the AppConfig Agent HTTP server. Only used when `enable_appconfig_agent` is `true`.                                                                                                                                          | `number`       | `2772`      | no          |
 | [appconfig_agent_version]               | Version of the AWS AppConfig Agent image. Pin to a specific version for production stability.                                                                                                                                         | `string`       | `"2.x"`     | no          |
@@ -420,6 +422,7 @@ volumes = {
 
 [adot]: https://github.com/aws-observability/aws-otel-collector
 [appconfig-agent]: https://docs.aws.amazon.com/appconfig/latest/userguide/appconfig-integration-containers-agent.html
+[appconfig_agent_application_id]: #aws-appconfig-agent
 [appconfig_agent_environment_variables]: #aws-appconfig-agent
 [appconfig_agent_port]: #aws-appconfig-agent
 [appconfig_agent_version]: #aws-appconfig-agent

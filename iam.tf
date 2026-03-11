@@ -95,7 +95,7 @@ resource "aws_iam_policy" "appconfig" {
           "appconfig",
           data.aws_region.current.name,
           data.aws_caller_identity.identity.account_id,
-          "application/*/environment/*/configuration/*"
+          "application/${var.appconfig_agent_application_id}/environment/*/configuration/*"
         ])
       }
     ]

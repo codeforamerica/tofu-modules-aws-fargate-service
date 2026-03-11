@@ -1,3 +1,13 @@
+variable "appconfig_agent_application_id" {
+  type        = string
+  description = <<-EOT
+    AWS AppConfig application ID to scope the agent's IAM permissions to
+    a specific application. Required when `enable_appconfig_agent` is
+    `true`.
+    EOT
+  default     = ""
+}
+
 variable "appconfig_agent_environment_variables" {
   type        = map(string)
   description = <<-EOT
