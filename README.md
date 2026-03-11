@@ -426,9 +426,9 @@ volumes = {
 [badge-release]: https://img.shields.io/github/v/release/codeforamerica/tofu-modules-aws-fargate-service?logo=github&label=Latest%20Release
 [container_command]: #container_command
 [ecs-exec]: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-exec.html
-[fargate-task-sizes]: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definition_parameters.html#task_size
 [enable_appconfig_agent]: #aws-appconfig-agent
 [environment_secrets]: #environment_secrets
+[fargate-task-sizes]: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definition_parameters.html#task_size
 [import]: https://opentofu.org/docs/cli/import/
 [latest-release]: https://github.com/codeforamerica/tofu-modules-aws-fargate-service/releases/latest
 [manage_performance_log_group]: #manage_performance_log_group
