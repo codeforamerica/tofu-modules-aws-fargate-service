@@ -168,6 +168,11 @@ module "ecs_service" {
       otel_version      = var.otel_collector_version
       volumes           = var.volumes
 
+      enable_appconfig_agent   = var.enable_appconfig_agent
+      appconfig_agent_version  = var.appconfig_agent_version
+      appconfig_agent_port     = var.appconfig_agent_port
+      appconfig_agent_env_vars = var.appconfig_agent_environment_variables
+
       # Split defined secrets on ":" and use the name to get the arn.
       env_secrets = {
         for key, value in var.environment_secrets :
