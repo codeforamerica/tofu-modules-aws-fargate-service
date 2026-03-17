@@ -324,6 +324,14 @@ variable "otel_config" {
   default     = null
 }
 
+variable "otel_image" {
+  type        = string
+  description = <<-EOT
+    Container image to use for the OpenTelemetry collector sidecar.
+    EOT
+  default     = "public.ecr.aws/aws-observability/aws-otel-collector"
+}
+
 variable "otel_log_level" {
   type        = string
   description = "Log level for the OpenTelemetry collector."

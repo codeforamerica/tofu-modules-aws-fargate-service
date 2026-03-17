@@ -162,6 +162,7 @@ module "ecs_service" {
       region            = data.aws_region.current.name
       namespace         = "${var.project}/${var.service}"
       env_vars          = var.environment_variables
+      otel_image        = var.otel_image
       otel_log_level    = var.otel_log_level
       otel_secrets      = var.otel_secrets
       otel_ssm_arn      = aws_ssm_parameter.otel_config.arn

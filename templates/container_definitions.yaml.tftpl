@@ -59,7 +59,7 @@
     %{~ endfor ~}
 %{~ endif ~}
 - name: otel-collector
-  image: public.ecr.aws/aws-observability/aws-otel-collector:${otel_version}
+  image: ${otel_image}:${otel_version}
   memory: 512
   cpu: 256
   essential: false
