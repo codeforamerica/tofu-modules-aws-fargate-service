@@ -122,6 +122,12 @@ variable "enable_container_insights_enhanced" {
   default     = true
 }
 
+variable "enable_event_capturing" {
+  type        = bool
+  description = "Enable event capturing for the service."
+  default     = true
+}
+
 variable "enable_execute_command" {
   type        = bool
   description = "Enable ECS Exec for tasks within the service."

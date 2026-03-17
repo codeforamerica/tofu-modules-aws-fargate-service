@@ -18,6 +18,7 @@ locals {
 
   # Define log groups to be managed.
   log_groups = {
+    events      = var.enable_event_capturing ? join("/", compact(["/aws/ecs", var.project, var.environment, var.service, "events"])) : null
     service     = join("/", compact(["/aws/ecs", var.project, var.environment, var.service]))
     performance = var.manage_performance_log_group ? "/aws/ecs/containerinsights/${local.prefix}/performance" : null
   }
