@@ -32,12 +32,12 @@
   %{~ endif ~}
   environment:
     %{~ for key, value in env_vars ~}
-    - name: ${key}
+    - name: "${key}"
       value: "${value}"
     %{~ endfor ~}
   secrets:
     %{~ for key, value in env_secrets ~}
-    - name: ${key}
+    - name: "${key}"
       valueFrom: "${value}"
     %{~ endfor ~}
 %{~ if enable_appconfig_agent ~}
@@ -54,14 +54,12 @@
     - containerPort: ${appconfig_agent_port}
   environment:
     %{~ for key, value in appconfig_agent_env_vars ~}
-    - name: ${key}
+    - name: "${key}"
       value: "${value}"
     %{~ endfor ~}
 %{~ endif ~}
 - name: otel-collector
   image: ${otel_image}:${otel_version}
-  memory: 512
-  cpu: 256
   essential: false
   logConfiguration:
     logDriver: awslogs
@@ -70,13 +68,18 @@
       awslogs-region: "${region}"
       awslogs-stream-prefix: "otel-collector"
   environment:
+    - name: DD_OTELCOLLECTOR_ENABLED
+      value: "true"
     - name: OTEL_LOG_LEVEL
-      value: ${otel_log_level}
+      value: "${otel_log_level}"
   secrets:
-    - name: AOT_CONFIG_CONTENT
+    - name: OTEL_CONFIG
       valueFrom: "${otel_ssm_arn}"
     %{~ for key, value in otel_secrets ~}
-    - name: ${key}
+    - name: "${key}"
       valueFrom: "${value}"
     %{~ endfor ~}
-  command: ["--config=/etc/ecs/container-insights/otel-task-metrics-config.yaml"]
+  %{~ if otel_entrypoint != null ~}
+  entryPoint: ${jsonencode(otel_entrypoint)}
+  %{~ endif ~}
+  command: ["--config=env:OTEL_CONFIG"]

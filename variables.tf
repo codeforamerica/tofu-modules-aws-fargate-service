@@ -324,6 +324,14 @@ variable "otel_config" {
   default     = null
 }
 
+variable "otel_entrypoint" {
+  type        = list(string)
+  description = <<-EOT
+    Entrypoint for the OpenTelemetry collector sidecar.
+    EOT
+  default     = null
+}
+
 variable "otel_image" {
   type        = string
   description = <<-EOT
