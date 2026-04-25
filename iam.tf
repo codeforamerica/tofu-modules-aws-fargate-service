@@ -25,6 +25,8 @@ resource "aws_iam_policy" "secrets" {
 }
 
 resource "aws_iam_role" "execution" {
+  depends_on = [aws_iam_policy.execution, aws_iam_policy.secrets]
+
   name        = "${local.prefix}-exec"
   description = "${var.service} task execution role for ${var.project} ${var.environment}."
 
@@ -55,6 +57,8 @@ resource "aws_iam_role_policy_attachments_exclusive" "execution" {
 }
 
 resource "aws_iam_role" "task" {
+  depends_on = [aws_iam_policy.secrets]
+
   name        = "${local.prefix}-task"
   description = "${var.service} task role for ${var.project} ${var.environment}."
 
