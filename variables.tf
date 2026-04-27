@@ -287,6 +287,7 @@ variable "oidc_settings" {
     client_secret_arn      = optional(string, null)
     authorization_endpoint = string
     issuer                 = string
+    scope                  = optional(string, "openid")
     token_endpoint         = string
     user_info_endpoint     = string
   })
