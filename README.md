@@ -104,13 +104,13 @@ Your application retrieves configuration by making HTTP GET requests to
 `http://localhost:2772/applications/{app}/environments/{env}/configurations/{profile}`.
 The port can be customized with `appconfig_agent_port`.
 
-| Name                                  | Description                                                                  | Type          | Default | Required    |
-|---------------------------------------|------------------------------------------------------------------------------|---------------|---------|-------------|
-| enable_appconfig_agent                | Enable the AWS AppConfig Agent sidecar container.                            | `bool`        | `false` | no          |
-| appconfig_agent_application_id        | AppConfig application ID to scope IAM permissions.                           | `string`      | `""`    | conditional |
-| appconfig_agent_environment_variables | Environment variables for the AppConfig Agent sidecar.                       | `map(string)` | `{}`    | no          |
-| appconfig_agent_port                  | Port for the AppConfig Agent HTTP server.                                    | `number`      | `2772`  | no          |
-| appconfig_agent_version               | Version of the AWS AppConfig Agent image. Pin for production stability.      | `string`      | `"2.x"` | no          |
+| Name                                  | Description                                                             | Type          | Default | Required    |
+| ------------------------------------- | ----------------------------------------------------------------------- | ------------- | ------- | ----------- |
+| enable_appconfig_agent                | Enable the AWS AppConfig Agent sidecar container.                       | `bool`        | `false` | no          |
+| appconfig_agent_application_id        | AppConfig application ID to scope IAM permissions.                      | `string`      | `""`    | conditional |
+| appconfig_agent_environment_variables | Environment variables for the AppConfig Agent sidecar.                  | `map(string)` | `{}`    | no          |
+| appconfig_agent_port                  | Port for the AppConfig Agent HTTP server.                               | `number`      | `2772`  | no          |
+| appconfig_agent_version               | Version of the AWS AppConfig Agent image. Pin for production stability. | `string`      | `"2.x"` | no          |
 
 ### Configuring OpenTelemetry
 
@@ -167,7 +167,7 @@ The OpenTelemetry collector sidecar is always included and reserves a fixed
 portion of the task resources:
 
 | Container            | CPU (units) | Memory (MiB) |
-|----------------------|-------------|--------------|
+| -------------------- | ----------- | ------------ |
 | OTEL Collector       | 256         | 512          |
 | **Your application** | Remainder   | Remainder    |
 
@@ -193,7 +193,7 @@ the AppConfig Agent is enabled.
 > now to avoid unexpected changes in the future.
 
 | Name                                    | Description                                                                                                                                                                                                                           | Type           | Default     | Required    |
-|-----------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------|-------------|-------------|
+| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------- | ----------- | ----------- |
 | logging_key_id                          | KMS key to use for log encryption.                                                                                                                                                                                                    | `string`       | n/a         | yes         |
 | private_subnets                         | List of private subnet CIDR blocks.                                                                                                                                                                                                   | `list`         | n/a         | yes         |
 | project                                 | Name of the project.                                                                                                                                                                                                                  | `string`       | n/a         | yes         |
@@ -346,15 +346,16 @@ oidc_settings = {
 }
 ```
 
-| Name                   | Description                                                      | Type     | Default | Required    |
-|------------------------|------------------------------------------------------------------|----------|---------|-------------|
-| authorization_endpoint | Authorization endpoint from your provider.                       | `string` | n/a     | yes         |
-| issuer                 | Issuer endpoint from your provider.                              | `string` | n/a     | yes         |
-| token_endpoint         | Token endpoint from your provider.                               | `string` | n/a     | yes         |
-| user_info_endpoint     | User info endpoint from your provider.                           | `string` | n/a     | yes         |
-| client_id              | Client ID from your provider.                                    | `string` | `""`    | conditional |
-| client_secret          | Client secret from your provider.                                | `string` | `""`    | conditional |
-| client_secret_arn      | Secrets manager ARN where the client id and secret can be found. | `string` | `""`    | conditional |
+| Name                   | Description                                                      | Type     | Default    | Required    |
+| ---------------------- | ---------------------------------------------------------------- | -------- | ---------- | ----------- |
+| authorization_endpoint | Authorization endpoint from your provider.                       | `string` | n/a        | yes         |
+| issuer                 | Issuer endpoint from your provider.                              | `string` | n/a        | yes         |
+| token_endpoint         | Token endpoint from your provider.                               | `string` | n/a        | yes         |
+| user_info_endpoint     | User info endpoint from your provider.                           | `string` | n/a        | yes         |
+| client_id              | Client ID from your provider.                                    | `string` | `""`       | conditional |
+| client_secret          | Client secret from your provider.                                | `string` | `""`       | conditional |
+| client_secret_arn      | Secrets manager ARN where the client id and secret can be found. | `string` | `""`       | conditional |
+| scope                  | User claim scope to request.                                     | `string` | `"openid"` | no          |
 
 ### secrets_manager_secrets
 
@@ -376,7 +377,7 @@ secrets_manager_secrets = {
 ```
 
 | Name                   | Description                                                  | Type     | Default | Required |
-|------------------------|--------------------------------------------------------------|----------|---------|----------|
+| ---------------------- | ------------------------------------------------------------ | -------- | ------- | -------- |
 | description            | Description of the secret.                                   | `string` | n/a     | yes      |
 | recovery_window        | Number of days that a secret can be recovered after deltion. | `string` | `30`    | no       |
 | create_random_password | Creates a random password as the staring value.              | `bool`   | `false` | no       |
@@ -398,7 +399,7 @@ volumes = {
 ```
 
 | Name  | Description                                                         | Type     | Default        | Required |
-|-------|---------------------------------------------------------------------|----------|----------------|----------|
+| ----- | ------------------------------------------------------------------- | -------- | -------------- | -------- |
 | mount | Path in the container where the volume will be mounted.             | `string` | n/a            | yes      |
 | name  | Name of the volume. Defauls to the key from the map.                | `string` | `null`         | no       |
 | type  | Type of volume to create. Currently only `persistent` is supported. | `string` | `"persistent"` | no       |
@@ -406,7 +407,7 @@ volumes = {
 ## Outputs
 
 | Name                       | Description                                                             | Type           |
-|----------------------------|-------------------------------------------------------------------------|----------------|
+| -------------------------- | ----------------------------------------------------------------------- | -------------- |
 | cluster_name               | Name of the ECS Fargate cluster.                                        | `string`       |
 | docker_push                | Commands to push a Docker image to the container repository.            | `string`       |
 | endpoint_security_group_id | Security group ID for the endpoint.                                     | `string`       |
