@@ -1,5 +1,9 @@
 locals {
   fqdn = var.subdomain != "" ? "${var.subdomain}.${var.domain}" : var.domain
+  # Drop SANs that duplicate the primary certificate name; ACM rejects that.
+  certificate_sans = [
+    for name in var.certificate_sans : name if name != local.fqdn
+  ]
   hosted_zone_id = (!var.create_endpoint
     ? null
     : (var.hosted_zone_id == null ? data.aws_route53_zone.domain["this"].zone_id : var.hosted_zone_id)

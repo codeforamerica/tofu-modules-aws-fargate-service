@@ -50,6 +50,18 @@ variable "container_port" {
   default     = 80
 }
 
+variable "certificate_sans" {
+  type        = list(string)
+  description = <<-EOT
+    Additional subject alternative names for the ACM certificate. Use this for
+    wildcard names such as `*.example.org` when the ALB must terminate TLS for
+    hostnames beyond the primary `subdomain.domain` FQDN. Names that match the
+    primary FQDN are ignored. Existing DNS validation records cover SANs
+    automatically.
+    EOT
+  default     = []
+}
+
 variable "create_endpoint" {
   type        = bool
   description = "Create an Application Load Balancer for the service."

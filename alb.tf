@@ -74,8 +74,9 @@ module "alb" {
 resource "aws_acm_certificate" "endpoint" {
   for_each = var.create_endpoint ? toset(["this"]) : toset([])
 
-  domain_name       = local.fqdn
-  validation_method = "DNS"
+  domain_name               = local.fqdn
+  subject_alternative_names = local.certificate_sans
+  validation_method         = "DNS"
 
   lifecycle {
     create_before_destroy = true
