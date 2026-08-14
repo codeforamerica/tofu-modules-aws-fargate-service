@@ -50,6 +50,17 @@ variable "container_port" {
   default     = 80
 }
 
+variable "container_protocol" {
+  type        = string
+  description = "Protocol the ALB uses to communicate with the container. Set to HTTPS to encrypt traffic between the ALB and ECS tasks."
+  default     = "HTTP"
+
+  validation {
+    condition     = contains(["HTTP", "HTTPS"], var.container_protocol)
+    error_message = "container_protocol must be HTTP or HTTPS."
+  }
+}
+
 variable "create_endpoint" {
   type        = bool
   description = "Create an Application Load Balancer for the service."
