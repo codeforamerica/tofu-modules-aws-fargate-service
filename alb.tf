@@ -52,7 +52,7 @@ module "alb" {
   target_groups = {
     endpoint = {
       name        = local.target_group_name
-      protocol    = "HTTP"
+      protocol    = var.container_protocol
       target_type = "ip"
       port        = var.container_port
 
@@ -61,6 +61,7 @@ module "alb" {
       create_attachment = false
 
       health_check = {
+        protocol            = var.container_protocol
         path                = var.health_check_path
         healthy_threshold   = 5
         unhealthy_threshold = 2
