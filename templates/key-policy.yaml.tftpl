@@ -25,9 +25,12 @@ Statement:
   Effect: Allow
   Resource: "*"
   Principal:
-    AWS:
-    %{ for arn in ecs_roles ~}
-    - "${arn}"
-    %{ endfor }
+    AWS: arn:${partition}:iam::${account_id}:root
+  Condition:
+    ArnEquals:
+      aws:PrincipalArn:
+      %{ for arn in ecs_roles ~}
+      - "${arn}"
+      %{ endfor }
   Action:
   - kms:GenerateDataKey*
